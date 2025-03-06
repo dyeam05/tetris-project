@@ -2,40 +2,30 @@
 
 using namespace std;
 
-int score = 0;
-int level = 0;
-int linesCleared;
-int fallingSpeed;
+int score = 0; //global score variable. stores the current game score
+int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
+int linesCleared; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
+int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
 
-/* 
-Building block for tetronimo objects. Each square object stores color information, as well as pointers to adjacent square objects stored in tetronimo and grid objecs. 
+
+/**
+*   Tetromino object. 
+*   Each tetromino block on the board is created with this class. the tetromino shapes is stored in an int matrix 'squares'. 
+*   This 4x4 matrix is populated with zeros until the buildTetromino() method is called. this method uses the 'id' variable in a switch to determine which shape is to be built.
+*   Each shape is stored within the matrix, with arbitrary value determining its position. 
+*   
+*   Variables are as follows:
+*   int squares -> 4x4 matrix that stores the shape of the tetromino
+*   int id -> stores the value (1-7) of the tetromino shape
+*   char color -> color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
+*   int xpos -> stores the x position of the tetromino relative to the game board grid
+*   int ypos -> stores the y position of the tetromino relative to the game board grid
+*   bool falling -> determines if the tetromino is still in play, or that it is still falling down the game board.
+*   
 */
-class Square {
+class Tetronimo { 
     public:
-    Square() { //default constructor. sets color value to blank char and directional pointers to nullptr.
-        this->color = ' ';
-        top = nullptr;
-        left = nullptr;
-        bottom = nullptr;
-        right = nullptr;
-    }
-    Square(char color){ //parameterized constructor (color). sets color char to the given char and directional pointers to nullptr.
-        this->color = color;
-        top = nullptr;
-        left = nullptr;
-        bottom = nullptr;
-        right = nullptr;
-    }
-    Square* top; //pointer to above square
-    Square* left; //pointer to left square
-    Square* bottom; //pointer to below square
-    Square* right; //pointer to right square
-    char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
-};
-
-class Tetronimo {
-    public:
-    Tetronimo() {
+    Tetronimo() { //Default Constructor. sets all int values to 0, color value to empty char and falling to false.
         id = 0;
         color = ' ';
         xpos = 0;
@@ -113,26 +103,36 @@ class Tetronimo {
         }
     }
 
-    int squares[4][4];
-    int xpos;
-    int ypos;
-    int id;
-    char color;
-    bool falling;
+    int squares[4][4]; //4x4 matrix that stores the shape of the tetromino
+    int xpos; //stores the x position of the tetromino relative to the game board grid
+    int ypos; //stores the y position of the tetromino relative to the game board grid
+    int id; //stores the value (1-7) of the tetromino shape
+    char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
+    bool falling; //determines if the tetromino is still in play, or that it is still falling down the game board.
     void rotate();
     void changeX(int x);
     void changeY(int y);
     void changePos(int newx, int newy);
 };
 
-class grid { 
+class Grid { 
     public:
-    int* grid [10][20];
-    void lineClear();
-    void shiftDown();
-    void doubleClear();
-    void tripleClear();
-    void tetrisClear();
+
+    Grid() { //Default Constructor. Creates the grid and sets all matrix values to empty '0'.
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 10; j++) {
+                grid[i][j] = 0;
+            }
+        }
+
+        numSquares = 0;
+    }
+
+    int numSquares;
+    int grid[10][20];
+    void lineClear(int line);
+    void shiftDown(int line);
+    void multiClear(int lines);
 };
 
 int main() {
@@ -143,6 +143,8 @@ int main() {
     Tetronimo* zTest = new Tetronimo(5, 'r');
     Tetronimo* reverseZTest = new Tetronimo(6, 'r');
     Tetronimo* tTest = new Tetronimo(7, 'r');
+
+    Grid* gridTest = new Grid();
 
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++) {
@@ -206,6 +208,13 @@ int main() {
     }
 
     cout << endl;
+
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 10; j++) {
+            cout << gridTest->grid[i][j] << " ";
+        }
+        cout << endl;
+    }
 
     return 0;
 }
