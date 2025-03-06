@@ -23,9 +23,11 @@ int fallingSpeed; //global variable storing the speed in which the tetrominos fa
 *   bool falling -> determines if the tetromino is still in play, or that it is still falling down the game board.
 *   
 */
-class Tetronimo { 
+
+class Tetromino { 
     public:
-    Tetronimo() { //Default Constructor. sets all int values to 0, color value to empty char and falling to false.
+    /* Default Constructor. sets all int values to 0, color value to empty char and falling to false. */
+    Tetromino() { 
         id = 0;
         color = ' ';
         xpos = 0;
@@ -33,7 +35,7 @@ class Tetronimo {
         falling = false;
     }
 
-    Tetronimo(int id, char color) {
+    Tetromino(int id, char color) {
         this->id = id;
         this->color = color;
         xpos = 0;
@@ -46,10 +48,10 @@ class Tetronimo {
             }
         }
 
-        buildTetronimo();
+        buildTetromino();
     }
 
-    void buildTetronimo() {
+    void buildTetromino() {
         switch (id) {
             case 1: //straight line piece
                 squares[3][0] = 1;
@@ -118,31 +120,39 @@ class Tetronimo {
 class Grid { 
     public:
 
-    Grid() { //Default Constructor. Creates the grid and sets all matrix values to empty '0'.
+    /*Default Constructor. Creates the grid and sets all matrix values to empty '0'.*/
+    Grid() { 
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 10; j++) {
                 grid[i][j] = 0;
             }
         }
-
         numSquares = 0;
     }
 
     int numSquares;
     int grid[10][20];
+    Tetromino* pieces;
+    void addTetromino(Tetromino* piece) {
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 4; j++) {
+                grid[i][j+3] = piece->squares[i+2][j];
+            }
+        }
+    }
     void lineClear(int line);
     void shiftDown(int line);
     void multiClear(int lines);
 };
 
 int main() {
-    Tetronimo* lineTest = new Tetronimo(1, 'r');
-    Tetronimo* reverseLTest = new Tetronimo(2, 'r');
-    Tetronimo* lTest = new Tetronimo(3, 'r');
-    Tetronimo* squareTest = new Tetronimo(4, 'r');
-    Tetronimo* zTest = new Tetronimo(5, 'r');
-    Tetronimo* reverseZTest = new Tetronimo(6, 'r');
-    Tetronimo* tTest = new Tetronimo(7, 'r');
+    Tetromino* lineTest = new Tetromino(1, 'r');
+    Tetromino* reverseLTest = new Tetromino(2, 'r');
+    Tetromino* lTest = new Tetromino(3, 'r');
+    Tetromino* squareTest = new Tetromino(4, 'r');
+    Tetromino* zTest = new Tetromino(5, 'r');
+    Tetromino* reverseZTest = new Tetromino(6, 'r');
+    Tetromino* tTest = new Tetromino(7, 'r');
 
     Grid* gridTest = new Grid();
 
@@ -208,6 +218,17 @@ int main() {
     }
 
     cout << endl;
+
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 10; j++) {
+            cout << gridTest->grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+
+    gridTest->addTetromino(lineTest);
 
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 10; j++) {
