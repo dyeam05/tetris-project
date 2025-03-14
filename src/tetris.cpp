@@ -1,3 +1,12 @@
+/*
+* Tetris Project in C++ with raylib
+* Author: Daniel Yeaman
+*
+* Description: Working on writing a tetris program from scratch to learn more about C++, external libraries, UI creation, and game design. 
+* Feel free to read and use code for inspiration and leave feedback.
+*/
+
+
 #include <iostream>
 
 using namespace std;
@@ -8,7 +17,7 @@ int linesCleared; //global variable storing total lines cleared. level increases
 int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
 
 
-/**
+/*
 *   Tetromino object. 
 *   Each tetromino block on the board is created with this class. the tetromino shapes is stored in an int matrix 'squares'. 
 *   This 4x4 matrix is populated with zeros until the buildTetromino() method is called. this method uses the 'id' variable in a switch to determine which shape is to be built.
@@ -23,23 +32,22 @@ int fallingSpeed; //global variable storing the speed in which the tetrominos fa
 *   bool falling -> determines if the tetromino is still in play, or that it is still falling down the game board.
 *   
 */
-
 class Tetromino { 
     public:
     /* Default Constructor. sets all int values to 0, color value to empty char and falling to false. */
     Tetromino() { 
         id = 0;
         color = ' ';
-        xpos = 0;
-        ypos = 0;
+        lXpos = 0;
+        rXpos = 0;
+        tYpos = 0;
+        bYpos = 0;
         falling = false;
     }
 
     Tetromino(int id, char color) {
         this->id = id;
         this->color = color;
-        xpos = 0;
-        ypos = 0;
         falling = true;
 
         for(int i = 0; i < 4; i++){
@@ -54,10 +62,14 @@ class Tetromino {
     void buildTetromino() {
         switch (id) {
             case 1: //straight line piece
-                squares[3][0] = 1;
-                squares[3][1] = 1;
-                squares[3][2] = 1;
-                squares[3][3] = 1;
+                squares[2][0] = 1;
+                squares[2][1] = 1;
+                squares[2][2] = 1;
+                squares[2][3] = 1;
+                lXpos = 3;
+                rXpos = 6;
+                tYpos = 0;
+                bYpos = 0;
                 break;
             
             case 2: //reverse l piece
@@ -65,6 +77,10 @@ class Tetromino {
                 squares[3][0] = 1;
                 squares[3][1] = 1;
                 squares[3][2] = 1;
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
                 break;
             
             case 3: //l piece
@@ -72,6 +88,10 @@ class Tetromino {
                 squares[3][0] = 1;
                 squares[3][1] = 1;
                 squares[3][2] = 1;
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
                 break;
             
             case 4: //square piece
@@ -79,6 +99,10 @@ class Tetromino {
                 squares[2][2] = 1;
                 squares[3][1] = 1;
                 squares[3][2] = 1;
+                lXpos = 4;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
                 break;
 
             case 5: //z piece
@@ -86,6 +110,10 @@ class Tetromino {
                 squares[2][1] = 1;
                 squares[3][1] = 1;
                 squares[3][2] = 1;
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
                 break;
 
             case 6: //reverse z piece
@@ -93,6 +121,10 @@ class Tetromino {
                 squares[2][2] = 1;
                 squares[3][0] = 1;
                 squares[3][1] = 1;
+                lXpos = 0;
+                rXpos = 3;
+                tYpos = 0;
+                bYpos = 1;
                 break;
 
             case 7: //t piece
@@ -100,17 +132,24 @@ class Tetromino {
                 squares[3][0] = 1;
                 squares[3][1] = 1;
                 squares[3][2] = 1;
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
             default:
                 break;
         }
     }
 
     int squares[4][4]; //4x4 matrix that stores the shape of the tetromino
-    int xpos; //stores the x position of the tetromino relative to the game board grid
-    int ypos; //stores the y position of the tetromino relative to the game board grid
+    int lXpos; //stores the x position of the left-most square in the tetromino relative to the game board grid.
+    int rXpos; //stores the x position of the right-most square in the tetromino relative to the game board grid.
+    int tYpos; //stores the y position of the tetromino relative to the game board grid
+    int bYpos;
     int id; //stores the value (1-7) of the tetromino shape
     char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
     bool falling; //determines if the tetromino is still in play, or that it is still falling down the game board.
+    int numSquares; //number of squares 
     void rotate();
     void changeX(int x);
     void changeY(int y);
@@ -139,11 +178,58 @@ class Grid {
                 grid[i][j+3] = piece->squares[i+2][j];
             }
         }
+        numSquares += 4;
+    }
+
+    void movePiece(Tetromino* piece, char direction) {
+        switch (direction) {
+            case 'l':
+                if(piece->lXpos > 0 && grid[piece->tYpos][piece->lXpos-1] != 1 && grid[piece->bYpos][piece->lXpos-1] != 1) {
+                    for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+                        for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
+                            if(grid[i][j] == 1) {
+                                grid[i][j-1] = 1;
+                                grid[i][j] = 0;
+                            }
+                        }
+                    }
+                    piece->lXpos--;
+                    piece->rXpos--;
+                }
+                break;
+            case 'r':
+                if(piece->rXpos < 10 && grid[piece->tYpos][piece->rXpos+1] != 1 && grid[piece->bYpos][piece->rXpos+1] != 1) {
+                    for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+                        for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
+                            if(grid[i][j] == 1) {
+                                grid[i][j+1] = 1;
+                                grid[i][j] = 0;
+                            }
+                        }
+                    }
+                    piece->lXpos++;
+                    piece->rXpos++;
+                }
+                break;
+            case 'd':
+                break;
+            default:
+                break;
+        }
+    }
+    void printgrid() {
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 10; j++) {
+                cout << grid[i][j] << " ";
+            }
+            cout << endl;
+        }
     }
     void lineClear(int line);
-    void shiftDown(int line);
+    void lineShift(int line);
     void multiClear(int lines);
 };
+
 
 int main() {
     Tetromino* lineTest = new Tetromino(1, 'r');
@@ -155,87 +241,28 @@ int main() {
     Tetromino* tTest = new Tetromino(7, 'r');
 
     Grid* gridTest = new Grid();
-
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << lineTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
+    gridTest->addTetromino(tTest);
+    gridTest->printgrid();
 
     cout << endl;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << reverseLTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
+    gridTest->movePiece(tTest, 'l');
+    gridTest->printgrid();
 
     cout << endl;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << lTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
+    gridTest->movePiece(tTest, 'l');
+    gridTest->printgrid();
 
     cout << endl;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << squareTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
+    gridTest->movePiece(tTest, 'l');
+    gridTest->printgrid();
 
     cout << endl;
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << zTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
-
-    cout << endl;
-
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << reverseZTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
-
-    cout << endl;
-
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++) {
-            cout << tTest->squares[i][j] << " ";
-        }
-        cout << endl;
-    }
-
-    cout << endl;
-
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 10; j++) {
-            cout << gridTest->grid[i][j] << " ";
-        }
-        cout << endl;
-    }
-
-    cout << endl;
-
-    gridTest->addTetromino(lineTest);
-
-    for(int i = 0; i < 20; i++){
-        for(int j = 0; j < 10; j++) {
-            cout << gridTest->grid[i][j] << " ";
-        }
-        cout << endl;
-    }
+    gridTest->movePiece(tTest, 'r');
+    gridTest-> printgrid();
 
     return 0;
-}
+};
