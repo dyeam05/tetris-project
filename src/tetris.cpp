@@ -182,10 +182,11 @@ class Grid {
     int numSquares;
     int grid[20][10];
     Tetromino* pieces;
+
     void addTetromino(Tetromino* piece) {
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 4; j++) {
-                grid[i][j+3] = piece->squares[i+2][j];
+                if(piece->squares[i+2][j] == 1) grid[i][j+3] = piece->squares[i+2][j];
             }
         }
         numSquares += 4;
@@ -265,8 +266,14 @@ int main() {
     gridTest->printgrid();
     cout << endl;
     gridTest->movePiece(reverseLTest, 'r');
-
+    gridTest->movePiece(reverseLTest, 'r');
+    gridTest->movePiece(reverseLTest, 'r');
     gridTest-> printgrid();
+    cout << endl;
+
+    gridTest->addTetromino(squareTest);
+    gridTest->printgrid();
+
 
     delete lineTest;
     delete reverseLTest;
