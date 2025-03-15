@@ -275,6 +275,7 @@ int main() {
     delete zTest;
     delete reverseZTest;
     delete tTest;
+    delete gridTest;
 
     return 0;
 };
