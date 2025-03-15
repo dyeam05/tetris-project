@@ -141,6 +141,15 @@ class Tetromino {
         }
     }
 
+    void printTetromino() {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                cout << squares[i][j];
+            }
+            cout << endl;
+        }
+    }
+
     int squares[4][4]; //4x4 matrix that stores the shape of the tetromino
     int lXpos; //stores the x position of the left-most square in the tetromino relative to the game board grid.
     int rXpos; //stores the x position of the right-most square in the tetromino relative to the game board grid.
@@ -167,10 +176,11 @@ class Grid {
             }
         }
         numSquares = 0;
+        pieces = nullptr;
     }
 
     int numSquares;
-    int grid[10][20];
+    int grid[20][10];
     Tetromino* pieces;
     void addTetromino(Tetromino* piece) {
         for(int i = 0; i < 2; i++) {
@@ -184,7 +194,9 @@ class Grid {
     void movePiece(Tetromino* piece, char direction) {
         switch (direction) {
             case 'l':
-                if(piece->lXpos > 0 && grid[piece->tYpos][piece->lXpos-1] != 1 && grid[piece->bYpos][piece->lXpos-1] != 1) {
+                if(piece->lXpos > 0 
+                    && grid[piece->tYpos][piece->lXpos-1] != 1 
+                    && grid[piece->bYpos][piece->lXpos-1] != 1) {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                         for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
                             if(grid[i][j] == 1) {
@@ -198,9 +210,11 @@ class Grid {
                 }
                 break;
             case 'r':
-                if(piece->rXpos < 10 && grid[piece->tYpos][piece->rXpos+1] != 1 && grid[piece->bYpos][piece->rXpos+1] != 1) {
+                if(piece->rXpos < 9 
+                    && grid[piece->tYpos][piece->rXpos+1] != 1 
+                    && grid[piece->bYpos][piece->rXpos+1] != 1) {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-                        for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
+                        for(int j = piece->rXpos; j >= piece->lXpos; j--) {
                             if(grid[i][j] == 1) {
                                 grid[i][j+1] = 1;
                                 grid[i][j] = 0;
@@ -225,6 +239,10 @@ class Grid {
             cout << endl;
         }
     }
+
+    bool overlapCheck(Tetromino* piece) {
+        return false;
+    }
     void lineClear(int line);
     void lineShift(int line);
     void multiClear(int lines);
@@ -240,29 +258,23 @@ int main() {
     Tetromino* reverseZTest = new Tetromino(6, 'r');
     Tetromino* tTest = new Tetromino(7, 'r');
 
+    tTest->printTetromino();
+
     Grid* gridTest = new Grid();
     gridTest->addTetromino(tTest);
     gridTest->printgrid();
-
     cout << endl;
+    gridTest->movePiece(reverseLTest, 'r');
 
-    gridTest->movePiece(tTest, 'l');
-    gridTest->printgrid();
-
-    cout << endl;
-
-    gridTest->movePiece(tTest, 'l');
-    gridTest->printgrid();
-
-    cout << endl;
-
-    gridTest->movePiece(tTest, 'l');
-    gridTest->printgrid();
-
-    cout << endl;
-
-    gridTest->movePiece(tTest, 'r');
     gridTest-> printgrid();
+
+    delete lineTest;
+    delete reverseLTest;
+    delete lTest;
+    delete squareTest;
+    delete zTest;
+    delete reverseZTest;
+    delete tTest;
 
     return 0;
 };
