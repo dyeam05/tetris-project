@@ -240,7 +240,8 @@ class Grid {
             cout << endl;
         }
     }
-
+    
+    /*Ensures that the given tetromino will not overlap with another piece on the board.*/
     bool overlapCheck(Tetromino* piece) {
         return false;
     }
