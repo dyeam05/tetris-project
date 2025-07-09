@@ -184,8 +184,8 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/main.o
-OBJECTS += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/tetris.o
+OBJECTS += $(OBJDIR)/tetris.o
 
 # Rules
 # #############################################
@@ -249,7 +249,7 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/main.o: ../../src/main.cpp
+$(OBJDIR)/tetris.o: ../../src/tetris.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
