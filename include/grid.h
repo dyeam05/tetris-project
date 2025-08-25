@@ -1,5 +1,8 @@
 #include "tetromino.h"
 
+#ifndef GRID_H
+#define GRID_H
+
 class Grid { 
     public:
 
@@ -108,3 +111,5 @@ class Grid {
     void lineShift(int line);
     void multiClear(int lines);
 };
+
+#endif

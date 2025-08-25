@@ -1,20 +1,6 @@
-/*
-* Tetris Project in C++ with raylib
-* Author: Daniel Yeaman
-*
-* Description: Working on writing a tetris program from scratch to learn more about C++, external libraries, UI creation, and game design. 
-* Feel free to read and use code for inspiration and leave feedback.
-*/
-
-
 #include <iostream>
 #include "tetromino.h"
 #include "grid.h"
-
-int score = 0; //global score variable. stores the current game score
-int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
-int linesCleared; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
-int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
 
 int main() {
     Tetromino* lineTest = new Tetromino(1, 'r');

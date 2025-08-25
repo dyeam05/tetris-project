@@ -14,6 +14,9 @@
 *   
 */
 
+#ifndef TETROMINO_H
+#define TETROMINO_H
+
 #include <iostream>
 
 class Tetromino { 
@@ -148,3 +151,5 @@ class Tetromino {
     void changeY(int y);
     void changePos(int newx, int newy);
 };
+
+#endif
