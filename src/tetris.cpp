@@ -5,22 +5,40 @@
 * Description: Working on writing a tetris program from scratch to learn more about C++, external libraries, UI creation, and game design. 
 * Feel free to read and use code for inspiration and leave feedback.
 *
-* This code is built from the raylib_quickstart guide from github
+* This code was started from the raylib_quickstart guide by JeffM2401 on github
+* https://github.com/raylib-extras/raylib-quickstart
 *
 */
 
+
+//------------------------------------------------------------------------------------------//
 #include "raylib.h"
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 #include "tetromino.h"		// header that defines function of tetromino pieces
 #include "grid.h"			// header that defines function of grid
 
-int windowWidth = 1280;
-int windowHeight = 720;
-int score = 0; //global score variable. stores the current game score
-int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
-int linesCleared; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
-int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
+#include <string>
 
+
+//-------------------------------------------------------------------------------------------------------------------------------//
+static const int windowWidth = 1280;
+static const int windowHeight = 720;
+static const int boardWidth = 500;
+static const int boardHeight = windowHeight - 100;
+static const int nextWidth = 200;
+static const int nextHeight = 250;
+
+static int score = 0; //global score variable. stores the current game score
+static int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
+static int linesCleared; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
+static int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
+
+
+//------------------------------------------------------------------------------------//
+Rectangle gameBoard = { windowWidth/2 - boardWidth / 2, 50, boardWidth, boardHeight};
+Rectangle nextWindow = {windowWidth/2 - boardWidth / 2 - nextWidth - 50, 200, nextWidth, nextHeight};
+
+//--------------------------------------------------------------------------------------------------------------------------------------------//
 int main ()
 {
 	// Tell the window to use vsync and work on high DPI displays
@@ -31,9 +49,6 @@ int main ()
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
-
-	// Load a texture from the resources directory
-	Texture wabbit = LoadTexture("wabbit_alpha.png");
 	
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
@@ -42,21 +57,24 @@ int main ()
 		BeginDrawing();
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(BLACK);
+		ClearBackground(WHITE);
 
 		// draw some text using the default font
-		DrawText("Tetris", 0,0,20,WHITE);
+		DrawText("Tetris", windowWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
 
-		// draw our texture to the screen
-		DrawTexture(wabbit, 400, 200, WHITE);
-		
+		// draw game board using rectangle
+		DrawRectangleLinesEx(gameBoard, 10, GRAY);
+
+		// draw scoreboard and next pieces
+		DrawText("Score: ", windowWidth/2 - boardWidth / 2 - nextWidth - 50,100,40, GRAY);
+		DrawText("Next:", windowWidth/2 - boardWidth / 2 - nextWidth - 50,150,40, GRAY);
+		DrawRectangleLinesEx(nextWindow, 10, GRAY);
+
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
 	}
 
 	// cleanup
-	// unload our texture so it can be cleaned up
-	UnloadTexture(wabbit);
 
 	// destroy the window and cleanup the OpenGL context
 	CloseWindow();

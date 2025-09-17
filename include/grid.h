@@ -84,7 +84,7 @@ class Grid {
     
     //Ensures that the given tetromino will not overlap with another piece on the board.
     //This looks really inefficient. Work on fixing later.
-    //Write an algorithm to speed this up.
+    // TODO: Write a better algorithm to speed this up.
     bool overlapCheck(Tetromino* piece) {
         if(piece->lXpos > 0 
             && piece->rXpos < 10 

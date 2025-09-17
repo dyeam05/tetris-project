@@ -1,0 +1,4 @@
+TODO:
+- Get rid of hard-coded numbers.
+- Abstract frame drawing with dedicated methods.
+- Finish classes in header files.
