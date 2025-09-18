@@ -3,17 +3,17 @@
 *   rshapes - Basic functions to draw 2d shapes and check collisions
 *
 *   ADDITIONAL NOTES:
-*       Shapes can be draw using 3 types of primitives: LINES, TRIANGLES and QUADS.
+*       Shapes can be draw using 3 types of primitives: LINES, TRIANGLES and QUADS
 *       Some functions implement two drawing options: TRIANGLES and QUADS, by default TRIANGLES
 *       are used but QUADS implementation can be selected with SUPPORT_QUADS_DRAW_MODE define
 *
 *       Some functions define texture coordinates (rlTexCoord2f()) for the shapes and use a
 *       user-provided texture with SetShapesTexture(), the pourpouse of this implementation
-*       is allowing to reduce draw calls when combined with a texture-atlas.
+*       is allowing to reduce draw calls when combined with a texture-atlas
 *
 *       By default, raylib sets the default texture and rectangle at InitWindow()[rcore] to one
 *       white character of default font [rtext], this way, raylib text and shapes can be draw with
-*       a single draw call and it also allows users to configure it the same way with their own fonts.
+*       a single draw call and it also allows users to configure it the same way with their own fonts
 *
 *   CONFIGURATION:
 *       #define SUPPORT_MODULE_RSHAPES
@@ -83,14 +83,13 @@ static Texture2D texShapes = { 1, 1, 1, 1, 7 };                // Texture used o
 static Rectangle texShapesRec = { 0.0f, 0.0f, 1.0f, 1.0f };    // Texture source rectangle used on shapes drawing
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Declaration
+// Module Internal Functions Declaration
 //----------------------------------------------------------------------------------
 static float EaseCubicInOut(float t, float b, float c, float d);    // Cubic easing
 
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-
 // Set texture and rectangle to be used on shapes drawing
 // NOTE: It can be useful when using basic shapes and one single font,
 // defining a font char white rectangle would allow drawing everything in a single draw call
@@ -2371,7 +2370,7 @@ bool CheckCollisionPointLine(Vector2 point, Vector2 p1, Vector2 p2, int threshol
 }
 
 // Check if circle collides with a line created between two points [p1] and [p2]
-RLAPI bool CheckCollisionCircleLine(Vector2 center, float radius, Vector2 p1, Vector2 p2)
+bool CheckCollisionCircleLine(Vector2 center, float radius, Vector2 p1, Vector2 p2)
 {
     float dx = p1.x - p2.x;
     float dy = p1.y - p2.y;
@@ -2420,7 +2419,7 @@ Rectangle GetCollisionRec(Rectangle rec1, Rectangle rec2)
 }
 
 //----------------------------------------------------------------------------------
-// Module specific Functions Definition
+// Module Internal Functions Definition
 //----------------------------------------------------------------------------------
 
 // Cubic easing in-out

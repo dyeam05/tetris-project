@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [core] example - Generate random values
+*   raylib [core] example - random values
 *
 *   Example complexity rating: [★☆☆☆] 1/4
 *
@@ -25,14 +25,14 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - generate random values");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - random values");
 
     // SetRandomSeed(0xaabbccff);   // Set a custom random seed if desired, by default: "time(NULL)"
 
     int randValue = GetRandomValue(-8, 5);   // Get a random integer number between -8 and 5 (both included)
-    
+
     unsigned int framesCounter = 0; // Variable used to count frames
-    
+
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 

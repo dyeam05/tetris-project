@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [textures] example - Fog of war
+*   raylib [textures] example - fog of war
 *
 *   Example complexity rating: [★★★☆] 3/4
 *
@@ -21,6 +21,9 @@
 #define PLAYER_SIZE      16         // Player size
 #define PLAYER_TILE_VISIBILITY  2   // Player can see 2 tiles around its position
 
+//----------------------------------------------------------------------------------
+// Types and Structures Definition
+//----------------------------------------------------------------------------------
 // Map data type
 typedef struct Map {
     unsigned int tilesX;            // Number of tiles in X axis
