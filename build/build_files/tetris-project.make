@@ -12,10 +12,10 @@ endif
 
 ifeq ($(config),debug_x64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -24,16 +24,16 @@ ifeq ($(config),debug_x64)
   TARGETDIR = ../../bin/Debug
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x64/Debug/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
+  ALL_LDFLAGS += $(LDFLAGS) -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -48,10 +48,10 @@ endif
 
 ifeq ($(config),debug_x86)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -60,16 +60,16 @@ ifeq ($(config),debug_x86)
   TARGETDIR = ../../bin/Debug
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x86/Debug/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32
+  ALL_LDFLAGS += $(LDFLAGS) -m32
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -84,10 +84,10 @@ endif
 
 ifeq ($(config),debug_arm64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -96,14 +96,14 @@ ifeq ($(config),debug_arm64)
   TARGETDIR = ../../bin/Debug
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/ARM64/Debug/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug/libraylib.a
   ALL_LDFLAGS += $(LDFLAGS)
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -120,10 +120,10 @@ endif
 
 ifeq ($(config),release_x64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -132,16 +132,16 @@ ifeq ($(config),release_x64)
   TARGETDIR = ../../bin/Release
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x64/Release/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
+  ALL_LDFLAGS += $(LDFLAGS) -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -156,10 +156,10 @@ endif
 
 ifeq ($(config),release_x86)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -168,16 +168,16 @@ ifeq ($(config),release_x86)
   TARGETDIR = ../../bin/Release
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x86/Release/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s
+  ALL_LDFLAGS += $(LDFLAGS) -m32
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -192,10 +192,10 @@ endif
 
 ifeq ($(config),release_arm64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -204,16 +204,16 @@ ifeq ($(config),release_arm64)
   TARGETDIR = ../../bin/Release
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/ARM64/Release/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -s
+  ALL_LDFLAGS += $(LDFLAGS)
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -228,10 +228,10 @@ endif
 
 ifeq ($(config),debug_rgfw_x64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -240,16 +240,16 @@ ifeq ($(config),debug_rgfw_x64)
   TARGETDIR = ../../bin/Debug_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x64/Debug_RGFW/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug_RGFW/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
+  ALL_LDFLAGS += $(LDFLAGS) -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -264,10 +264,10 @@ endif
 
 ifeq ($(config),debug_rgfw_x86)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -276,16 +276,16 @@ ifeq ($(config),debug_rgfw_x86)
   TARGETDIR = ../../bin/Debug_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x86/Debug_RGFW/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug_RGFW/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32
+  ALL_LDFLAGS += $(LDFLAGS) -m32
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -300,10 +300,10 @@ endif
 
 ifeq ($(config),debug_rgfw_arm64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -312,14 +312,14 @@ ifeq ($(config),debug_rgfw_arm64)
   TARGETDIR = ../../bin/Debug_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/ARM64/Debug_RGFW/tetris-project
-  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Debug_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Debug_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Debug_RGFW/libraylib.a
   ALL_LDFLAGS += $(LDFLAGS)
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -336,10 +336,10 @@ endif
 
 ifeq ($(config),release_rgfw_x64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -348,16 +348,16 @@ ifeq ($(config),release_rgfw_x64)
   TARGETDIR = ../../bin/Release_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x64/Release_RGFW/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release_RGFW/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
+  ALL_LDFLAGS += $(LDFLAGS) -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -372,10 +372,10 @@ endif
 
 ifeq ($(config),release_rgfw_x86)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -384,16 +384,16 @@ ifeq ($(config),release_rgfw_x86)
   TARGETDIR = ../../bin/Release_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/x86/Release_RGFW/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release_RGFW/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s
+  ALL_LDFLAGS += $(LDFLAGS) -m32
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -408,10 +408,10 @@ endif
 
 ifeq ($(config),release_rgfw_arm64)
   ifeq ($(origin CC), default)
-    CC = gcc
+    CC = clang
   endif
   ifeq ($(origin CXX), default)
-    CXX = g++
+    CXX = clang++
   endif
   ifeq ($(origin AR), default)
     AR = ar
@@ -420,16 +420,16 @@ ifeq ($(config),release_rgfw_arm64)
   TARGETDIR = ../../bin/Release_RGFW
   TARGET = $(TARGETDIR)/tetris-project
   OBJDIR = obj/ARM64/Release_RGFW/tetris-project
-  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11 -D_GNU_SOURCE
+  DEFINES += -DNDEBUG -DPLATFORM_DESKTOP_RGFW -DGRAPHICS_API_OPENGL_33
   INCLUDES += -I../../src -I../../include -I../external/raylib-master/src -I../external/raylib-master/src/external -I../external/raylib-master/src/external/glfw/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17
-  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../../bin/Release_RGFW/libraylib.a -lpthread -lm -ldl -lrt -lX11
+  LIBS += ../../bin/Release_RGFW/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
   LDDEPS += ../../bin/Release_RGFW/libraylib.a
-  ALL_LDFLAGS += $(LDFLAGS) -s
+  ALL_LDFLAGS += $(LDFLAGS)
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
