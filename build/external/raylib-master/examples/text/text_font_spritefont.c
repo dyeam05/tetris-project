@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [text] example - Sprite font loading
+*   raylib [text] example - font spritefont
 *
 *   Example complexity rating: [★☆☆☆] 1/4
 *
@@ -12,7 +12,7 @@
 *     - Rectangles must be defined by a MAGENTA color background
 *
 *   Following those constraints, a font can be provided just by an image,
-*   this is quite handy to avoid additional font descriptor files (like BMFonts use).
+*   this is quite handy to avoid additional font descriptor files (like BMFonts use)
 *
 *   Example originally created with raylib 1.0, last time updated with raylib 1.0
 *
@@ -35,7 +35,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [text] example - sprite font loading");
+    InitWindow(screenWidth, screenHeight, "raylib [text] example - font spritefont");
 
     const char msg1[50] = "THIS IS A custom SPRITE FONT...";
     const char msg2[50] = "...and this is ANOTHER CUSTOM font...";

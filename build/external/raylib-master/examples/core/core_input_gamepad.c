@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [core] example - Gamepad input
+*   raylib [core] example - input gamepad
 *
 *   Example complexity rating: [★☆☆☆] 1/4
 *
@@ -38,7 +38,7 @@ int main(void)
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);  // Set MSAA 4X hint before windows creation
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - gamepad input");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - input gamepad");
 
     Texture2D texPs3Pad = LoadTexture("resources/ps3.png");
     Texture2D texXboxPad = LoadTexture("resources/xbox.png");
@@ -256,11 +256,11 @@ int main(void)
 
                 }
 
-                DrawText(TextFormat("DETECTED AXIS [%i]:", GetGamepadAxisCount(0)), 10, 50, 10, MAROON);
+                DrawText(TextFormat("DETECTED AXIS [%i]:", GetGamepadAxisCount(gamepad)), 10, 50, 10, MAROON);
 
-                for (int i = 0; i < GetGamepadAxisCount(0); i++)
+                for (int i = 0; i < GetGamepadAxisCount(gamepad); i++)
                 {
-                    DrawText(TextFormat("AXIS %i: %.02f", i, GetGamepadAxisMovement(0, i)), 20, 70 + 20*i, 10, DARKGRAY);
+                    DrawText(TextFormat("AXIS %i: %.02f", i, GetGamepadAxisMovement(gamepad, i)), 20, 70 + 20*i, 10, DARKGRAY);
                 }
 
                 if (GetGamepadButtonPressed() != GAMEPAD_BUTTON_UNKNOWN) DrawText(TextFormat("DETECTED BUTTON: %i", GetGamepadButtonPressed()), 10, 430, 10, RED);

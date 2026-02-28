@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [models] example - loading gltf with animations
+*   raylib [models] example - loading gltf
 *
 *   Example complexity rating: [★☆☆☆] 1/4
 *
@@ -32,7 +32,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [models] example - loading gltf animations");
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - loading gltf");
 
     // Define the camera to look into our 3d world
     Camera camera = { 0 };
@@ -45,7 +45,7 @@ int main(void)
     // Load gltf model
     Model model = LoadModel("resources/models/gltf/robot.glb");
     Vector3 position = { 0.0f, 0.0f, 0.0f }; // Set model position
-    
+
     // Load gltf model animations
     int animsCount = 0;
     unsigned int animIndex = 0;

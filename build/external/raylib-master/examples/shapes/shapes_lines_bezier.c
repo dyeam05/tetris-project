@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib [shapes] example - Cubic-bezier lines
+*   raylib [shapes] example - lines bezier
 *
 *   Example complexity rating: [★☆☆☆] 1/4
 *
@@ -26,7 +26,7 @@ int main(void)
     const int screenHeight = 450;
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - cubic-bezier lines");
+    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - lines bezier");
 
     Vector2 startPoint = { 30, 30 };
     Vector2 endPoint = { (float)screenWidth - 30, (float)screenHeight - 30 };
@@ -69,7 +69,7 @@ int main(void)
 
             // Draw line Cubic Bezier, in-out interpolation (easing), no control points
             DrawLineBezier(startPoint, endPoint, 4.0f, BLUE);
-            
+
             // Draw start-end spline circles with some details
             DrawCircleV(startPoint, CheckCollisionPointCircle(mouse, startPoint, 10.0f)? 14.0f : 8.0f, moveStartPoint? RED : BLUE);
             DrawCircleV(endPoint, CheckCollisionPointCircle(mouse, endPoint, 10.0f)? 14.0f : 8.0f, moveEndPoint? RED : BLUE);
