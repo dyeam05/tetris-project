@@ -18,15 +18,19 @@
 #include "grid.h"			// header that defines function of grid
 
 #include <string>
+#include <vector>
 
 
 //-------------------------------------------------------------------------------------------------------------------------------//
 static const int windowWidth = 1280;
 static const int windowHeight = 720;
-static const int boardWidth = 500;
-static const int boardHeight = windowHeight - 100;
+static const int boardWidth = 300;	//arbitrary values for testing, will fix later
+static const int boardHeight = 600;
 static const int nextWidth = 200;
 static const int nextHeight = 250;
+static const int lineWeight = 10;
+static const int squareSize = boardWidth / 10;
+static const int boardStartingX = windowWidth/2 - boardWidth / 2;
 
 static int score = 0; //global score variable. stores the current game score
 static int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
@@ -35,8 +39,11 @@ static int fallingSpeed; //global variable storing the speed in which the tetrom
 
 
 //------------------------------------------------------------------------------------//
-Rectangle gameBoard = { windowWidth/2 - boardWidth / 2, 50, boardWidth, boardHeight};
-Rectangle nextWindow = {windowWidth/2 - boardWidth / 2 - nextWidth - 50, 200, nextWidth, nextHeight};
+
+Rectangle gameBoard = {boardStartingX, 50, boardWidth, boardHeight};
+Rectangle nextWindow = {boardStartingX - nextWidth - 50, 200, nextWidth, nextHeight};
+Grid gameGrid;
+
 
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 int main ()
@@ -63,12 +70,25 @@ int main ()
 		DrawText("Tetris", windowWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
 
 		// draw game board using rectangle
-		DrawRectangleLinesEx(gameBoard, 10, GRAY);
+		DrawRectangleLinesEx(gameBoard, lineWeight, GRAY);
 
 		// draw scoreboard and next pieces
-		DrawText("Score: ", windowWidth/2 - boardWidth / 2 - nextWidth - 50,100,40, GRAY);
-		DrawText("Next:", windowWidth/2 - boardWidth / 2 - nextWidth - 50,150,40, GRAY);
+		DrawText("Score: ", boardStartingX - nextWidth - 50,100,40, GRAY);
+		DrawText("Next:", boardStartingX - nextWidth - 50,150,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
+
+		// draw horizontal lines
+		for(int i = 1; i <= 20; i++) {
+			DrawLine(boardStartingX, 50+squareSize*i, boardStartingX + boardWidth, 50+squareSize*i, GRAY);
+		}
+
+		// draw vertical lines
+		for(int i = 1; i <= 10; i++) {
+			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
+		}
+
+		// add pieces
+		
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
