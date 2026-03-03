@@ -59,7 +59,7 @@ class Tetromino {
                 bYpos = 0;
                 break;
             
-            case 2: //reverse l piece
+            case 2: //l piece
                 squares[2][0] = 1;
                 squares[3][0] = 1;
                 squares[3][1] = 1;
@@ -70,7 +70,7 @@ class Tetromino {
                 bYpos = 1;
                 break;
             
-            case 3: //l piece
+            case 3: //reverse l piece
                 squares[2][2] = 1;
                 squares[3][0] = 1;
                 squares[3][1] = 1;

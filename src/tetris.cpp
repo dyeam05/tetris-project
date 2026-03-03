@@ -89,13 +89,14 @@ int main ()
 		}
 
 		//for testing only
-		gameGrid.grid[0][1] = 1;
+		Tetromino* test = new Tetromino(5, 'r');
+		gameGrid.addTetromino(test);
 
 		// add pieces
 		for(int i = 0; i < 20; i++) {
 			for(int j = 0; j < 10; j++) {
 				if(gameGrid.grid[i][j] == 1) {
-					DrawRectangle(boardStartingX+squareSize*i, boardStartingY+squareSize*j, squareSize, squareSize, RED);
+					DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, RED);
 				}
 			}
 		}
