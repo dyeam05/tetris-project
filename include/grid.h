@@ -34,7 +34,7 @@ class Grid {
     void movePiece(Tetromino* piece, char direction) {
         switch (direction) {
             case 'l':
-                if(piece->lXpos > 0 
+                if(piece->lXpos >= 0 
                     && grid[piece->tYpos][piece->lXpos-1] != 1 
                     && grid[piece->bYpos][piece->lXpos-1] != 1) {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
@@ -51,11 +51,11 @@ class Grid {
                 break;
 
             case 'r':
-                if(piece->rXpos < 9 
+                if(piece->rXpos < 10 
                     && grid[piece->tYpos][piece->rXpos+1] != 1 
                     && grid[piece->bYpos][piece->rXpos+1] != 1) {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-                        for(int j = piece->rXpos; j >= piece->lXpos; j--) {
+                        for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                             if(grid[i][j] == 1) {
                                 grid[i][j+1] = 1;
                                 grid[i][j] = 0;
@@ -68,7 +68,20 @@ class Grid {
                 break;
 
             case 'd':
-                break;
+                if(piece->bYpos < 20
+                    && grid[piece->bYpos+1][piece->lXpos] != 1
+                    && grid[piece->bYpos+1][piece->rXpos] != 1) {
+                    for(int i = piece->bYpos; i >= piece->tYpos; i--) {
+                        for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                            if(grid[i][j] == 1) {
+                                grid[i+1][j] = 1;
+                                grid[i][j] = 0;
+                            }
+                        }
+                    }
+                    piece->tYpos++;
+                    piece->bYpos++;
+                }
             default:
                 break;
         }
@@ -81,10 +94,20 @@ class Grid {
             std::cout << std::endl;
         }
     }
+
+    //takes condition from movePiece down function and returns a boolean if the piece can no longer be moved down
+    bool finishedFalling(Tetromino* piece) {
+        if(piece->bYpos > 20) {
+            return true;
+        }
+        if (grid[piece->bYpos+1][piece->lXpos] == 1 || grid[piece->bYpos+1][piece->rXpos] == 1) {
+                return true;
+        }
+            return false;
+    }
     
     //Ensures that the given tetromino will not overlap with another piece on the board.
-    //This looks really inefficient. Work on fixing later.
-    // TODO: Write a better algorithm to speed this up.
+    //TODO:Rewrite overlapCheck to check all squares in a given range and direction using for loop.
     bool overlapCheck(Tetromino* piece) {
         if(piece->lXpos > 0 
             && piece->rXpos < 10 
