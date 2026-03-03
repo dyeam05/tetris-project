@@ -31,6 +31,7 @@ static const int nextHeight = 250;
 static const int lineWeight = 10;
 static const int squareSize = boardWidth / 10;
 static const int boardStartingX = windowWidth/2 - boardWidth / 2;
+static const int boardStartingY = 50;
 
 static int score = 0; //global score variable. stores the current game score
 static int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
@@ -40,7 +41,7 @@ static int fallingSpeed; //global variable storing the speed in which the tetrom
 
 //------------------------------------------------------------------------------------//
 
-Rectangle gameBoard = {boardStartingX, 50, boardWidth, boardHeight};
+Rectangle gameBoard = {boardStartingX, boardStartingY, boardWidth, boardHeight};
 Rectangle nextWindow = {boardStartingX - nextWidth - 50, 200, nextWidth, nextHeight};
 Grid gameGrid;
 
@@ -87,8 +88,17 @@ int main ()
 			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
 		}
 
+		//for testing only
+		gameGrid.grid[0][1] = 1;
+
 		// add pieces
-		
+		for(int i = 0; i < 20; i++) {
+			for(int j = 0; j < 10; j++) {
+				if(gameGrid.grid[i][j] == 1) {
+					DrawRectangle(boardStartingX+squareSize*i, boardStartingY+squareSize*j, squareSize, squareSize, RED);
+				}
+			}
+		}
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
