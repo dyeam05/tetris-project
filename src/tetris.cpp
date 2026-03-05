@@ -50,6 +50,19 @@ std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
 int framesCounter = 0;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
+
+//Game over condition
+//checks if there is a piece in play when the top row is full
+bool gameOver(std::vector<Tetromino*> pieceStack, Grid pieceGrid) {
+	bool over = false;
+	if(pieces.size() > 0 && pieceStack.back()->falling && pieceGrid.grid[0][4]==1 && pieceGrid.grid[0][5]==1) {
+		over = true;
+	}
+	return over;
+}
+
+
+
 int main ()
 {
 	// Tell the window to use vsync and work on high DPI displays
@@ -93,7 +106,6 @@ int main ()
 		for(int i = 1; i <= 10; i++) {
 			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
 		}
-
 		//add new piece to matrix when previous piece has finished falling
 		if(pieces.size() == 0 || !(pieces.back()->falling)) {
 			randValue = GetRandomValue(1, 7);
@@ -112,8 +124,6 @@ int main ()
 			}
 		}
 
-
-
 		// add pieces to board
 		for(int i = 0; i < 20; i++) {
 			for(int j = 0; j < 10; j++) {
@@ -122,7 +132,6 @@ int main ()
 				}
 			}
 		}
-
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
 	}

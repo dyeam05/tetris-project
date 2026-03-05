@@ -97,7 +97,7 @@ class Grid {
 
     //takes condition from movePiece down function and returns a boolean if the piece can no longer be moved down
     bool finishedFalling(Tetromino* piece) {
-        if(piece->bYpos > 20) {
+        if(piece->bYpos == 19) {
             return true;
         }
         if (grid[piece->bYpos+1][piece->lXpos] == 1 || grid[piece->bYpos+1][piece->rXpos] == 1) {
@@ -126,11 +126,21 @@ class Grid {
         
         return false;
     }
+
+    bool checkFullRow(int row) {
+        bool check = true;
+        for(int i = 0; i < 10; i++) {
+            if(grid[row][i] == 0) check = false;
+        }
+        return check;
+    }
+
     void lineClear(int line) {
         for(int i = 0; i < 10; i++) {
             grid[line][i] = 0;
         }
     }
+
     void lineShift(int line);
     void multiClear(int lines);
 };
