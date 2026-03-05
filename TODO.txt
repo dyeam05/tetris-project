@@ -1,6 +1,5 @@
 TODO:
 - add piece rotate function (remember to rotate pieces CLOCKWISE)
-- add game over condition
 - add color implementation for displaying pieces
 - add wait time for pieces to be locked
 - use game piece vector as stack. pop pieces from stack when they are stuck in place.

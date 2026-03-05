@@ -49,17 +49,9 @@ Grid gameGrid;
 std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
 int framesCounter = 0;
+bool gameOver = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
-//Game over condition
-//checks if there is a piece in play when the top row is full
-bool gameOver(std::vector<Tetromino*> pieceStack, Grid pieceGrid) {
-	bool over = false;
-	if(pieces.size() > 0 && pieceStack.back()->falling && pieceGrid.grid[0][4]==1 && pieceGrid.grid[0][5]==1) {
-		over = true;
-	}
-	return over;
-}
 
 
 
@@ -106,31 +98,44 @@ int main ()
 		for(int i = 1; i <= 10; i++) {
 			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
 		}
-		//add new piece to matrix when previous piece has finished falling
-		if(pieces.size() == 0 || !(pieces.back()->falling)) {
-			randValue = GetRandomValue(1, 7);
-			pieces.push_back(new Tetromino(randValue, 'r'));
-			pieces.back()->falling = true;
-			gameGrid.addTetromino(pieces.back());
-		}
-		//
-		else {
-			if (((framesCounter/120)%2) == 1) {
-				gameGrid.movePiece(pieces.back(), 'd');
-				framesCounter = 0;
-				if(gameGrid.finishedFalling(pieces.back())) {
-					pieces.back()->falling = false;
+		
+		if(!gameOver) {
+			//add new piece to matrix when previous piece has finished falling
+			if(pieces.size() == 0 || !(pieces.back()->falling)) {
+				randValue = GetRandomValue(1, 7);
+				if(pieces.size() > 0) {
+					if (gameGrid.grid[0][4] == 1 || gameGrid.grid[0][5] == 1) {
+						gameOver = true;
+					}
+					else {
+						pieces.erase(pieces.begin());
+					}
+				}
+				pieces.push_back(new Tetromino(randValue, 'r'));
+				pieces.back()->falling = true;
+				gameGrid.addTetromino(pieces.back());
+			}
+			else {
+				if (((framesCounter/120)%2) == 1) {
+					gameGrid.movePiece(pieces.back(), 'd');
+					framesCounter = 0;
+					if(gameGrid.finishedFalling(pieces.back())) {
+						pieces.back()->falling = false;
+					}
 				}
 			}
-		}
 
-		// add pieces to board
-		for(int i = 0; i < 20; i++) {
-			for(int j = 0; j < 10; j++) {
-				if(gameGrid.grid[i][j] == 1) {
-					DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, RED);
+			// add pieces to board
+			for(int i = 0; i < 20; i++) {
+				for(int j = 0; j < 10; j++) {
+					if(gameGrid.grid[i][j] == 1) {
+						DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, RED);
+					}
 				}
 			}
+		}
+		else {
+			DrawText("Game Over", boardStartingX+50,100,100, GRAY);
 		}
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
