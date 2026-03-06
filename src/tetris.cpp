@@ -43,7 +43,7 @@ static int fallingSpeed; //global variable storing the speed in which the tetrom
 
 //------------------------------------------------------------------------------------//
 //Create Game objects and structures
-Rectangle gameBoard = {boardStartingX, boardStartingY, boardWidth, boardHeight};
+Rectangle gameBoard = {boardStartingX-10, boardStartingY-10, boardWidth+20, boardHeight+20};
 Rectangle nextWindow = {boardStartingX - nextWidth - 50, 200, nextWidth, nextHeight};
 Grid gameGrid;
 std::vector<Tetromino*> pieces;
@@ -52,9 +52,30 @@ int framesCounter = 0;
 bool gameOver = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
+//----------------------------------------------------------------------------------------//
+//Game Functions
+Color charToColor(char c) {
+		switch(c) {
+		case 't':
+			return SKYBLUE;
+		case 'b':
+			return BLUE;
+		case 'o':
+			return ORANGE;
+		case 'y':
+			return YELLOW;
+		case 'g': 
+			return GREEN;
+		case 'p':
+			return PURPLE;
+		case 'r':
+			return RED;
+	}
+}
 
 
 
+//----------------------------------------------------------------------------------------//
 int main ()
 {
 	// Tell the window to use vsync and work on high DPI displays
@@ -98,20 +119,21 @@ int main ()
 		for(int i = 1; i <= 10; i++) {
 			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
 		}
-		
+
+		//if game over condition is false, continue to add pieces
 		if(!gameOver) {
 			//add new piece to matrix when previous piece has finished falling
 			if(pieces.size() == 0 || !(pieces.back()->falling)) {
 				randValue = GetRandomValue(1, 7);
 				if(pieces.size() > 0) {
-					if (gameGrid.grid[0][4] == 1 || gameGrid.grid[0][5] == 1) {
+					if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
 						gameOver = true;
 					}
 					else {
 						pieces.erase(pieces.begin());
 					}
 				}
-				pieces.push_back(new Tetromino(randValue, 'r'));
+				pieces.push_back(new Tetromino(randValue));
 				pieces.back()->falling = true;
 				gameGrid.addTetromino(pieces.back());
 			}
@@ -128,12 +150,13 @@ int main ()
 			// add pieces to board
 			for(int i = 0; i < 20; i++) {
 				for(int j = 0; j < 10; j++) {
-					if(gameGrid.grid[i][j] == 1) {
-						DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, RED);
+					if(gameGrid.grid[i][j] != '0') {
+						DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, charToColor(gameGrid.grid[i][j]));
 					}
 				}
 			}
 		}
+		//if game over condition is true, stop the gameplay and display game over message.
 		else {
 			DrawText("Game Over", boardStartingX+50,100,100, GRAY);
 		}

@@ -10,7 +10,7 @@ class Grid {
     Grid() { 
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 10; j++) {
-                grid[i][j] = 0;
+                grid[i][j] = '0';
             }
         }
         numSquares = 0;
@@ -18,13 +18,13 @@ class Grid {
     }
 
     int numSquares;
-    int grid[20][10];
+    char grid[20][10];
     Tetromino* pieces;
 
     void addTetromino(Tetromino* piece) {
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 4; j++) {
-                if(piece->squares[i+2][j] == 1) grid[i][j+3] = piece->squares[i+2][j];
+                if(piece->squares[i+2][j] != '0') grid[i][j+3] = piece->squares[i+2][j];
             }
         }
         numSquares += 4;
@@ -35,13 +35,13 @@ class Grid {
         switch (direction) {
             case 'l':
                 if(piece->lXpos >= 0 
-                    && grid[piece->tYpos][piece->lXpos-1] != 1 
-                    && grid[piece->bYpos][piece->lXpos-1] != 1) {
+                    && grid[piece->tYpos][piece->lXpos-1] == '0' 
+                    && grid[piece->bYpos][piece->lXpos-1] == '0') {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                         for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
-                            if(grid[i][j] == 1) {
-                                grid[i][j-1] = 1;
-                                grid[i][j] = 0;
+                            if(grid[i][j] != '0') {
+                                grid[i][j-1] = piece->color;
+                                grid[i][j] = '0';
                             }
                         }
                     }
@@ -52,13 +52,13 @@ class Grid {
 
             case 'r':
                 if(piece->rXpos < 10 
-                    && grid[piece->tYpos][piece->rXpos+1] != 1 
-                    && grid[piece->bYpos][piece->rXpos+1] != 1) {
+                    && grid[piece->tYpos][piece->rXpos+1] == '0' 
+                    && grid[piece->bYpos][piece->rXpos+1] == '0') {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                            if(grid[i][j] == 1) {
-                                grid[i][j+1] = 1;
-                                grid[i][j] = 0;
+                            if(grid[i][j] != '0') {
+                                grid[i][j+1] = piece->color;
+                                grid[i][j] = '0';
                             }
                         }
                     }
@@ -69,13 +69,13 @@ class Grid {
 
             case 'd':
                 if(piece->bYpos < 20
-                    && grid[piece->bYpos+1][piece->lXpos] != 1
-                    && grid[piece->bYpos+1][piece->rXpos] != 1) {
+                    && grid[piece->bYpos+1][piece->lXpos] == '0'
+                    && grid[piece->bYpos+1][piece->rXpos] == '0') {
                     for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                            if(grid[i][j] == 1) {
-                                grid[i+1][j] = 1;
-                                grid[i][j] = 0;
+                            if(grid[i][j] != '0') {
+                                grid[i+1][j] = piece->color;
+                                grid[i][j] = '0';
                             }
                         }
                     }
@@ -86,10 +86,10 @@ class Grid {
                 break;
         }
     }
-    void printgrid() {
+    void printGrid() {
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 10; j++) {
-                std::cout << grid[i][j] << " ";
+                std::cout << grid[i][j];
             }
             std::cout << std::endl;
         }
@@ -100,7 +100,7 @@ class Grid {
         if(piece->bYpos == 19) {
             return true;
         }
-        if (grid[piece->bYpos+1][piece->lXpos] == 1 || grid[piece->bYpos+1][piece->rXpos] == 1) {
+        if (grid[piece->bYpos+1][piece->lXpos] != '0' || grid[piece->bYpos+1][piece->rXpos] != '0') {
                 return true;
         }
             return false;
@@ -130,14 +130,14 @@ class Grid {
     bool checkFullRow(int row) {
         bool check = true;
         for(int i = 0; i < 10; i++) {
-            if(grid[row][i] == 0) check = false;
+            if(grid[row][i] == '0') check = false;
         }
         return check;
     }
 
     void lineClear(int line) {
         for(int i = 0; i < 10; i++) {
-            grid[line][i] = 0;
+            grid[line][i] = '0';
         }
     }
 
