@@ -1,11 +1,5 @@
 TODO:
 - add piece rotate function (remember to rotate pieces CLOCKWISE)
-
-- add color implementation for displaying pieces
-- - NEEDS REWRITE FOR COLOR AND GRID LOGIC.
-- - CHANGE GRID TO STORE CHAR VALUES FOR COLOR INSTEAD OF INTS 0 OR 1.
-- -
-
 - add wait time for pieces to be locked
 - use game piece vector as stack. pop pieces from stack when they are stuck in place.
 - add event listeners/handlers for keyboard input

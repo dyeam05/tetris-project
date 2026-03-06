@@ -73,7 +73,7 @@ class Tetromino {
                 break;
             
             case 3: //l piece
-                color = 'b';
+                color = 'o';
                 squares[2][2] = 'o';
                 squares[3][0] = 'o';
                 squares[3][1] = 'o';

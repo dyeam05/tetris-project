@@ -138,7 +138,8 @@ int main ()
 				gameGrid.addTetromino(pieces.back());
 			}
 			else {
-				if (((framesCounter/120)%2) == 1) {
+				if(IsKeyDown(KEY_RIGHT)) gameGrid.movePiece(pieces.back(), 'r');
+ 				if (((framesCounter/120)%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {

@@ -34,9 +34,7 @@ class Grid {
     void movePiece(Tetromino* piece, char direction) {
         switch (direction) {
             case 'l':
-                if(piece->lXpos >= 0 
-                    && grid[piece->tYpos][piece->lXpos-1] == '0' 
-                    && grid[piece->bYpos][piece->lXpos-1] == '0') {
+                if(leftColCheck(piece)){
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                         for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
                             if(grid[i][j] != '0') {
@@ -68,9 +66,7 @@ class Grid {
                 break;
 
             case 'd':
-                if(piece->bYpos < 20
-                    && grid[piece->bYpos+1][piece->lXpos] == '0'
-                    && grid[piece->bYpos+1][piece->rXpos] == '0') {
+                if(piece->bYpos < 20 && !bottomColCheck(piece)) {
                     for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                             if(grid[i][j] != '0') {
@@ -100,32 +96,48 @@ class Grid {
         if(piece->bYpos == 19) {
             return true;
         }
-        if (grid[piece->bYpos+1][piece->lXpos] != '0' || grid[piece->bYpos+1][piece->rXpos] != '0') {
+        if (bottomColCheck(piece)) {
                 return true;
         }
             return false;
     }
     
-    //Ensures that the given tetromino will not overlap with another piece on the board.
-    //TODO:Rewrite overlapCheck to check all squares in a given range and direction using for loop.
-    bool overlapCheck(Tetromino* piece) {
-        if(piece->lXpos > 0 
-            && piece->rXpos < 10 
-            && piece->tYpos > 0 
-            && piece->bYpos < 20
-            && grid[piece->tYpos][piece->lXpos - 1] == 0 
-            && grid[piece->bYpos][piece->lXpos - 1] == 0
-            && grid[piece->tYpos][piece->lXpos + 1] == 0 
-            && grid[piece->bYpos][piece->lXpos + 1] == 0
-            && grid[piece->tYpos][piece->rXpos - 1] == 0 
-            && grid[piece->bYpos][piece->rXpos - 1] == 0
-            && grid[piece->tYpos][piece->rXpos + 1] == 0 
-            && grid[piece->bYpos][piece->rXpos + 1] == 0) {
-                return true;
+    //checks if space underneath current piece is occupied by previous piece
+    bool bottomColCheck(Tetromino* piece) {
+        bool check = false;
+        for(int i = piece->lXpos; i <= piece->rXpos; i++) {
+            if(grid[piece->bYpos+1][i] != '0' && grid[piece->bYpos][i] != '0') {
+                check = true;
+                break;
             }
-        
-        return false;
+        }
+        return check;
     }
+
+    bool leftColCheck(Tetromino* piece) {
+        bool check = false;
+        if(piece->lXpos == 0) return true;
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            if(grid[i][piece->lXpos-1] != '0' && grid[i][piece->lXpos] != '0') {
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
+    bool rightColCheck(Tetromino* piece) {
+        bool check = false;
+        if(piece->rXpos == 9) return true;
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            if(grid[i][piece->rXpos+1] != '0' && grid[i][piece->rXpos] != '0') {
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
 
     bool checkFullRow(int row) {
         bool check = true;
