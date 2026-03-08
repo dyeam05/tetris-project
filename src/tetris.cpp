@@ -49,6 +49,7 @@ Grid gameGrid;
 std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
 int framesCounter = 0;
+int inputBuffer = 0;
 bool gameOver = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -138,7 +139,15 @@ int main ()
 				gameGrid.addTetromino(pieces.back());
 			}
 			else {
-				if(IsKeyDown(KEY_RIGHT)) gameGrid.movePiece(pieces.back(), 'r');
+				if(IsKeyPressed(KEY_RIGHT)) {
+						gameGrid.movePiece(pieces.back(), 'r');
+				}
+				if(IsKeyPressed(KEY_LEFT)) {
+					gameGrid.movePiece(pieces.back(), 'l');
+				}
+				if(IsKeyPressed(KEY_DOWN)) {
+					gameGrid.movePiece(pieces.back(), 'd');
+				} 
  				if (((framesCounter/120)%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					framesCounter = 0;

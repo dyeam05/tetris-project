@@ -34,7 +34,7 @@ class Grid {
     void movePiece(Tetromino* piece, char direction) {
         switch (direction) {
             case 'l':
-                if(leftColCheck(piece)){
+                if(!leftColCheck(piece)){
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                         for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
                             if(grid[i][j] != '0') {
@@ -49,11 +49,9 @@ class Grid {
                 break;
 
             case 'r':
-                if(piece->rXpos < 10 
-                    && grid[piece->tYpos][piece->rXpos+1] == '0' 
-                    && grid[piece->bYpos][piece->rXpos+1] == '0') {
+                if(!rightColCheck(piece)) {
                     for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-                        for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                        for(int j = piece->rXpos; j >= piece->lXpos; j--) {
                             if(grid[i][j] != '0') {
                                 grid[i][j+1] = piece->color;
                                 grid[i][j] = '0';

@@ -153,7 +153,6 @@ class Tetromino {
     char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
     bool falling; //determines if the tetromino is still in play, or that it is still falling down the game board.
     int numSquares; //number of squares 
-    void rotate(); //rotates piece CLOCKWISE
     void changeX(int x);
     void changeY(int y);
     void changePos(int newx, int newy);
