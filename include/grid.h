@@ -32,6 +32,10 @@ class Grid {
     }
 
 
+    void replaceTetromino(Tetromino* piece) {
+        
+    }
+
 
     void rotateTetromino(Tetromino* piece) {
 
@@ -43,7 +47,7 @@ class Grid {
 
         piece->rotate();
 
-        addTetromino(piece);
+        replaceTetromino(piece);
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
