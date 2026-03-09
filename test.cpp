@@ -1,0 +1,27 @@
+#include "tetromino.h"
+#include "grid.h"
+#include <iostream>
+
+
+
+int main() {
+    Grid testGrid;
+    Tetromino* testPiece = new Tetromino(1);
+    testGrid.addTetromino(testPiece);
+    testGrid.printGrid();
+
+    std::cout << std::endl;
+    testGrid.movePiece(testPiece, 'd');
+    testGrid.printGrid();
+
+    std::cout << std::endl;
+
+    testPiece->printTetromino();
+    std::cout << std::endl;
+
+    for(int i = 0; i < 4; i++) {
+        testPiece->rotate();
+        testPiece->printTetromino();
+        std::cout << std::endl;
+    }
+}
