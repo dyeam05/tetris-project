@@ -21,6 +21,7 @@ class Grid {
     char grid[20][10];
     Tetromino* pieces;
 
+    //TODO: rewrite function to use piece coordinates to add piece to grid
     void addTetromino(Tetromino* piece) {
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 4; j++) {
@@ -28,6 +29,21 @@ class Grid {
             }
         }
         numSquares += 4;
+    }
+
+
+
+    void rotateTetromino(Tetromino* piece) {
+
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                if(grid[i][j] != '0') grid[i][j] = '0';
+            }
+        }
+
+        piece->rotate();
+
+        addTetromino(piece);
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
@@ -145,14 +161,35 @@ class Grid {
         return check;
     }
 
+    bool lineFilled(int line) {
+        bool filled = true;
+        for(int i = 0; i < 9; i++) {
+            if(grid[line][i] == '0') filled = false;
+        }
+        return filled;
+    }
+
     void lineClear(int line) {
         for(int i = 0; i < 10; i++) {
             grid[line][i] = '0';
         }
     }
 
-    void lineShift(int line);
+    void lineShift(int line) {
+        for(int i = line; i > 0; i--) {
+            for(int j = 0; j < 9; j++) {
+                grid[i][j] = grid[i-1][j];
+            }
+        }
+    }
+
+    
     void multiClear(int lines);
+    
+    //rotates piece CLOCKWISE by 90 degrees
+    void rotate(Tetromino* piece) {
+        
+    } 
 };
 
 #endif

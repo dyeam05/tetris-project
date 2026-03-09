@@ -111,16 +111,6 @@ int main ()
 		DrawText("Next:", boardStartingX - nextWidth - 50,150,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 
-		// draw horizontal lines
-		for(int i = 1; i <= 20; i++) {
-			DrawLine(boardStartingX, 50+squareSize*i, boardStartingX + boardWidth, 50+squareSize*i, GRAY);
-		}
-
-		// draw vertical lines
-		for(int i = 1; i <= 10; i++) {
-			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
-		}
-
 		//if game over condition is false, continue to add pieces
 		if(!gameOver) {
 			//add new piece to matrix when previous piece has finished falling
@@ -153,6 +143,10 @@ int main ()
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {
 						pieces.back()->falling = false;
+						if(gameGrid.lineFilled(pieces.back()->bYpos)) {
+							gameGrid.lineClear(pieces.back()->bYpos);
+							gameGrid.lineShift(pieces.back()->bYpos);
+						}
 					}
 				}
 			}
@@ -170,6 +164,17 @@ int main ()
 		else {
 			DrawText("Game Over", boardStartingX+50,100,100, GRAY);
 		}
+
+		// draw horizontal lines
+		for(int i = 1; i <= 20; i++) {
+			DrawLine(boardStartingX, 50+squareSize*i, boardStartingX + boardWidth, 50+squareSize*i, GRAY);
+		}
+
+		// draw vertical lines
+		for(int i = 1; i <= 10; i++) {
+			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
+		}
+
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
 	}

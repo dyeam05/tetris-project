@@ -135,6 +135,116 @@ class Tetromino {
         }
     }
 
+    void clear() {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                squares[i][j] = '0';
+            } 
+        }
+    }
+
+    void rotate() {
+        clear();
+        orientation++;
+        if(orientation == 4) orientation = 0;
+        switch (id) {
+            case 1: //straight line piece
+
+                if(orientation == 0){
+                    squares[2][0] = 't';
+                    squares[2][1] = 't';
+                    squares[2][2] = 't';
+                    squares[2][3] = 't';
+                }
+                else if(orientation == 1) {
+                    squares[0][0] = 't';
+                    squares[1][0] = 't';
+                    squares[2][0] = 't';
+                    squares[3][0] = 't';
+                }
+                else if(orientation == 2) {
+                    squares[1][0] = 't';
+                    squares[1][1] = 't';
+                    squares[1][2] = 't';
+                    squares[1][3] = 't';
+                }
+                else {
+                    squares[0][1] = 't';
+                    squares[1][1] = 't';
+                    squares[2][1] = 't';
+                    squares[3][1] = 't';
+                }   
+                break;
+            
+            case 2: //reverse l piece
+                squares[2][0] = 'b';
+                squares[3][0] = 'b';
+                squares[3][1] = 'b';
+                squares[3][2] = 'b';
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+                break;
+            
+            case 3: //l piece
+                squares[2][2] = 'o';
+                squares[3][0] = 'o';
+                squares[3][1] = 'o';
+                squares[3][2] = 'o';
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+                break;
+            
+            case 4: //square piece
+                squares[2][1] = 'y';
+                squares[2][2] = 'y';
+                squares[3][1] = 'y';
+                squares[3][2] = 'y';
+                lXpos = 4;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+                break;
+
+            case 5: //z piece
+                squares[2][0] = 'g';
+                squares[2][1] = 'g';
+                squares[3][1] = 'g';
+                squares[3][2] = 'g';
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+                break;
+
+            case 6: //reverse z piece
+                squares[2][1] = 'p';
+                squares[2][2] = 'p';
+                squares[3][0] = 'p';
+                squares[3][1] = 'p';
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+                break;
+
+            case 7: //t piece
+                squares[2][1] = 'r';
+                squares[3][0] = 'r';
+                squares[3][1] = 'r';
+                squares[3][2] = 'r';
+                lXpos = 3;
+                rXpos = 5;
+                tYpos = 0;
+                bYpos = 1;
+            default:
+                break;
+        }
+    }
+
     void printTetromino() {
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
@@ -150,9 +260,9 @@ class Tetromino {
     int tYpos; //stores the y position of the top-most square tetromino relative to the game board grid.
     int bYpos; //stores the y position of the bottom-most square in the tetromino relative to the game board grid.
     int id; //stores the value (1-7) of the tetromino shape
+    int orientation = 0; //stores the orientation of the piece.
     char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
     bool falling; //determines if the tetromino is still in play, or that it is still falling down the game board.
-    int numSquares; //number of squares 
     void changeX(int x);
     void changeY(int y);
     void changePos(int newx, int newy);
