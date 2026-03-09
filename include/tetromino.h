@@ -34,7 +34,7 @@ class Tetromino {
 
     Tetromino(int id) {
         this->id = id;
-        color = ' ';
+        color = '0';
         falling = true;
 
         for(int i = 0; i < 4; i++){
@@ -149,97 +149,105 @@ class Tetromino {
         if(orientation == 4) orientation = 0;
         switch (id) {
             case 1: //straight line piece
-
                 if(orientation == 0){
-                    squares[2][0] = 't';
-                    squares[2][1] = 't';
-                    squares[2][2] = 't';
-                    squares[2][3] = 't';
+                    squares[2][0] = color;
+                    squares[2][1] = color;
+                    squares[2][2] = color;
+                    squares[2][3] = color;
+                    lXpos -= 1;
+                    rXpos += 2;
+                    tYpos += 2;
+                    bYpos -= 1;
                 }
                 else if(orientation == 1) {
-                    squares[0][0] = 't';
-                    squares[1][0] = 't';
-                    squares[2][0] = 't';
-                    squares[3][0] = 't';
+                    squares[0][0] = color;
+                    squares[1][0] = color;
+                    squares[2][0] = color;
+                    squares[3][0] = color;
+                    rXpos -= 3;
+                    tYpos -= 2;
+                    bYpos += 1;
                 }
                 else if(orientation == 2) {
-                    squares[1][0] = 't';
-                    squares[1][1] = 't';
-                    squares[1][2] = 't';
-                    squares[1][3] = 't';
+                    squares[1][0] = color;
+                    squares[1][1] = color;
+                    squares[1][2] = color;
+                    squares[1][3] = color;
+                    rXpos += 3;
+                    tYpos += 1;
+                    bYpos -= 2;
                 }
                 else {
-                    squares[0][1] = 't';
-                    squares[1][1] = 't';
-                    squares[2][1] = 't';
-                    squares[3][1] = 't';
+                    squares[0][1] = color;
+                    squares[1][1] = color;
+                    squares[2][1] = color;
+                    squares[3][1] = color;
+                    lXpos += 1;
+                    rXpos -= 2;
+                    tYpos -= 1;
+                    bYpos += 2;
                 }   
                 break;
             
             case 2: //reverse l piece
-                squares[2][0] = 'b';
-                squares[3][0] = 'b';
-                squares[3][1] = 'b';
-                squares[3][2] = 'b';
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                if(orientation == 0){
+                    squares[2][0] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    lXpos -= 1;
+                    rXpos += 2;
+                    tYpos += 2;
+                    bYpos -= 1;
+                }
+                else if(orientation == 1) {
+                    squares[1][1] = color;
+                    squares[1][0] = color;
+                    squares[2][0] = color;
+                    squares[3][0] = color;
+                    rXpos -= 3;
+                    tYpos -= 2;
+                    bYpos += 1;
+                }
+                else if(orientation == 2) {
+                    squares[2][2] = color;
+                    squares[1][0] = color;
+                    squares[1][1] = color;
+                    squares[1][2] = color;
+                    rXpos += 3;
+                    tYpos += 1;
+                    bYpos -= 2;
+                }
+                else {
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    squares[2][2] = color;
+                    squares[1][2] = color;
+                    lXpos += 1;
+                    rXpos -= 2;
+                    tYpos -= 1;
+                    bYpos += 2;
+                }
                 break;
             
             case 3: //l piece
-                squares[2][2] = 'o';
-                squares[3][0] = 'o';
-                squares[3][1] = 'o';
-                squares[3][2] = 'o';
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+
                 break;
             
             case 4: //square piece
-                squares[2][1] = 'y';
-                squares[2][2] = 'y';
-                squares[3][1] = 'y';
-                squares[3][2] = 'y';
-                lXpos = 4;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+
                 break;
 
             case 5: //z piece
-                squares[2][0] = 'g';
-                squares[2][1] = 'g';
-                squares[3][1] = 'g';
-                squares[3][2] = 'g';
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+
                 break;
 
             case 6: //reverse z piece
-                squares[2][1] = 'p';
-                squares[2][2] = 'p';
-                squares[3][0] = 'p';
-                squares[3][1] = 'p';
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+
                 break;
 
             case 7: //t piece
-                squares[2][1] = 'r';
-                squares[3][0] = 'r';
-                squares[3][1] = 'r';
-                squares[3][2] = 'r';
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+
             default:
                 break;
         }

@@ -4,3 +4,4 @@ resources/
 build-MinGW-W64.bat
 build-VisualStudio2022.bat
 Makefile
+obj/
