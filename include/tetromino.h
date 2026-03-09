@@ -196,17 +196,15 @@ class Tetromino {
                     squares[3][1] = color;
                     squares[3][2] = color;
                     lXpos -= 1;
-                    rXpos += 2;
-                    tYpos += 2;
-                    bYpos -= 1;
+                    tYpos += 1;
                 }
                 else if(orientation == 1) {
                     squares[1][1] = color;
                     squares[1][0] = color;
                     squares[2][0] = color;
                     squares[3][0] = color;
-                    rXpos -= 3;
-                    tYpos -= 2;
+                    rXpos -= 1;
+                    tYpos -= 1;
                     bYpos += 1;
                 }
                 else if(orientation == 2) {
@@ -214,9 +212,8 @@ class Tetromino {
                     squares[1][0] = color;
                     squares[1][1] = color;
                     squares[1][2] = color;
-                    rXpos += 3;
-                    tYpos += 1;
-                    bYpos -= 2;
+                    rXpos += 1;
+                    bYpos += 1;
                 }
                 else {
                     squares[3][1] = color;
@@ -224,29 +221,124 @@ class Tetromino {
                     squares[2][2] = color;
                     squares[1][2] = color;
                     lXpos += 1;
-                    rXpos -= 2;
-                    tYpos -= 1;
-                    bYpos += 2;
+                    bYpos += 1;
                 }
                 break;
             
             case 3: //l piece
+                if(orientation == 0){
+                    squares[2][2] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    lXpos += 1;
+                    tYpos += 1;
+                }
+                else if(orientation == 1) {
+                    squares[3][1] = color;
+                    squares[1][0] = color;
+                    squares[2][0] = color;
+                    squares[3][0] = color;
+                    rXpos -= 1;
+                    tYpos -= 1;
+                }
+                else if(orientation == 2) {
+                    squares[2][0] = color;
+                    squares[1][0] = color;
+                    squares[1][1] = color;
+                    squares[1][2] = color;
+                    rXpos += 1;
+                    bYpos += 1;
+                }
+                else {
+                    squares[1][1] = color;
+                    squares[3][2] = color;
+                    squares[2][2] = color;
+                    squares[1][2] = color;
+                    lXpos += 1;
+                    bYpos += 1;
+                }
 
                 break;
             
-            case 4: //square piece
-
+            case 4: //square piece. does nothing lol
                 break;
 
             case 5: //z piece
-
+                if(orientation == 0 || orientation == 2){
+                    squares[2][0] = color;
+                    squares[2][1] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    rXpos += 1;
+                    tYpos += 1;
+                }
+                else if(orientation == 1 || orientation == 3) {
+                    squares[3][0] = color;
+                    squares[2][0] = color;
+                    squares[2][1] = color;
+                    squares[1][1] = color;
+                    rXpos -= 1;
+                    tYpos -= 1;
+                }
                 break;
 
             case 6: //reverse z piece
+                if(orientation == 0 || orientation == 2){
+                    squares[2][1] = color;
+                    squares[2][2] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    rXpos += 1;
+                    tYpos += 1;
+                }
+                else if(orientation == 1 || orientation == 3) {
+                    squares[3][1] = color;
+                    squares[2][1] = color;
+                    squares[2][0] = color;
+                    squares[1][0] = color;
+                    rXpos -= 1;
+                    tYpos -= 1;
+                }
 
                 break;
 
             case 7: //t piece
+                if(orientation == 0){
+                    squares[2][1] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    lXpos += 1;
+                    tYpos += 1;
+                }
+                else if(orientation == 1) {
+                    squares[2][1] = color;
+                    squares[1][0] = color;
+                    squares[2][0] = color;
+                    squares[3][0] = color;
+                    rXpos -= 1;
+                    tYpos -= 1;
+                }
+                else if(orientation == 2) {
+                    squares[2][1] = color;
+                    squares[1][0] = color;
+                    squares[1][1] = color;
+                    squares[1][2] = color;
+                    rXpos += 1;
+                    bYpos += 1;
+                }
+                else {
+                    squares[2][1] = color;
+                    squares[3][2] = color;
+                    squares[2][2] = color;
+                    squares[1][2] = color;
+                    lXpos += 1;
+                    bYpos += 1;
+                }
+
+
+                break;
 
             default:
                 break;

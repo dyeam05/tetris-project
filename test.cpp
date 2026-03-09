@@ -6,7 +6,7 @@
 
 int main() {
     Grid testGrid;
-    Tetromino* testPiece = new Tetromino(2);
+    Tetromino* testPiece = new Tetromino(7);
     testGrid.addTetromino(testPiece);
     testGrid.printGrid();
 
