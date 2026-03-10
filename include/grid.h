@@ -33,12 +33,20 @@ class Grid {
 
 
     void replaceTetromino(Tetromino* piece) {
-        
+        int pieceX = 0;
+        int pieceY = 3 - (piece->bYpos - piece->tYpos);
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                grid[i][j] = piece->squares[pieceX][pieceY];
+                pieceX++;
+            }
+            pieceY++;
+            pieceX = 0;
+        }
     }
 
 
     void rotateTetromino(Tetromino* piece) {
-
         for(int i = piece->tYpos; i <= piece->bYpos; i++) {
             for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                 if(grid[i][j] != '0') grid[i][j] = '0';

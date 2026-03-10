@@ -20,8 +20,9 @@ int main() {
     std::cout << std::endl;
 
     for(int i = 0; i < 4; i++) {
-        testPiece->rotate();
-        testPiece->printTetromino();
+        testGrid.rotateTetromino(testPiece);
+        //testPiece->printTetromino();
+        //testGrid.printGrid();
         std::cout << std::endl;
     }
 }

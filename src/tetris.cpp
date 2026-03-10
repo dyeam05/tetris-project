@@ -137,6 +137,9 @@ int main ()
 				}
 				if(IsKeyPressed(KEY_DOWN)) {
 					gameGrid.movePiece(pieces.back(), 'd');
+				}
+				if(IsKeyPressed(KEY_UP)) {
+					gameGrid.rotateTetromino(pieces.back());
 				} 
  				if (((framesCounter/120)%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
