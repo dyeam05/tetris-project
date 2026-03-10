@@ -72,6 +72,7 @@ Color charToColor(char c) {
 		case 'r':
 			return RED;
 	}
+	return BLACK;
 }
 
 

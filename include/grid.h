@@ -33,11 +33,14 @@ class Grid {
 
 
     void replaceTetromino(Tetromino* piece) {
+        std::cout << "piece orientation: " << piece->orientation << std::endl; 
+        std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
         int pieceX = 0;
         int pieceY = 3 - (piece->bYpos - piece->tYpos);
         for(int i = piece->tYpos; i <= piece->bYpos; i++) {
             for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                grid[i][j] = piece->squares[pieceX][pieceY];
+                grid[i][j] = piece->squares[pieceY][pieceX];
+                std::cout << "piece grid coords: (" << pieceY << ", " << pieceX << ")" << std::endl; 
                 pieceX++;
             }
             pieceY++;
@@ -47,15 +50,19 @@ class Grid {
 
 
     void rotateTetromino(Tetromino* piece) {
-        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-            for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                if(grid[i][j] != '0') grid[i][j] = '0';
+        if(!topColCheck(piece)) {
+            for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+                for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                    if(grid[i][j] != '0') grid[i][j] = '0';
+                }
             }
+
+            piece->rotate();
+
+            replaceTetromino(piece);
+
+            printGrid();
         }
-
-        piece->rotate();
-
-        replaceTetromino(piece);
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
@@ -133,6 +140,18 @@ class Grid {
         bool check = false;
         for(int i = piece->lXpos; i <= piece->rXpos; i++) {
             if(grid[piece->bYpos+1][i] != '0' && grid[piece->bYpos][i] != '0') {
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
+    bool topColCheck(Tetromino* piece) {
+        bool check = false;
+        if(piece->tYpos == 0) return true;
+        for(int i = piece->lXpos; i <= piece->rXpos; i++) {
+            if(grid[piece->tYpos-1][i] != '0' && grid[piece->tYpos][i] != '0') {
                 check = true;
                 break;
             }

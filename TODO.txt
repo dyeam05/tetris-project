@@ -7,3 +7,4 @@ TODO:
 - add variables to control game speed with level increase
 - add scoring logic
 - add next queue for pieces to be generated before being in play
+- fix add piece logic for square and line piece

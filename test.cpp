@@ -11,7 +11,7 @@ int main() {
     testGrid.printGrid();
 
     std::cout << std::endl;
-    testGrid.movePiece(testPiece, 'd');
+    for(int i = 0; i < 4; i++) testGrid.movePiece(testPiece, 'd');
     testGrid.printGrid();
 
     std::cout << std::endl;
@@ -20,8 +20,10 @@ int main() {
     std::cout << std::endl;
 
     for(int i = 0; i < 4; i++) {
+        std::cout << "Grid w/ rotated piece:" << std::endl;
         testGrid.rotateTetromino(testPiece);
-        //testPiece->printTetromino();
+        std::cout << "rotated piece" << std::endl;
+        testPiece->printTetromino();
         //testGrid.printGrid();
         std::cout << std::endl;
     }

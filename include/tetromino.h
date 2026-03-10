@@ -50,10 +50,10 @@ class Tetromino {
         switch (id) {
             case 1: //straight line piece
                 color = 't';
-                squares[2][0] = 't';
-                squares[2][1] = 't';
-                squares[2][2] = 't';
-                squares[2][3] = 't';
+                squares[3][0] = 't';
+                squares[3][1] = 't';
+                squares[3][2] = 't';
+                squares[3][3] = 't';
                 lXpos = 3;
                 rXpos = 6;
                 tYpos = 0;
@@ -86,10 +86,10 @@ class Tetromino {
             
             case 4: //square piece
                 color = 'y';
+                squares[2][0] = 'y';
                 squares[2][1] = 'y';
-                squares[2][2] = 'y';
+                squares[3][0] = 'y';
                 squares[3][1] = 'y';
-                squares[3][2] = 'y';
                 lXpos = 4;
                 rXpos = 5;
                 tYpos = 0;
@@ -165,23 +165,22 @@ class Tetromino {
                     squares[2][0] = color;
                     squares[3][0] = color;
                     rXpos -= 3;
-                    tYpos -= 2;
-                    bYpos += 1;
+                    tYpos -= 3;
                 }
                 else if(orientation == 2) {
-                    squares[1][0] = color;
-                    squares[1][1] = color;
-                    squares[1][2] = color;
-                    squares[1][3] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    squares[3][3] = color;
                     rXpos += 3;
                     tYpos += 1;
                     bYpos -= 2;
                 }
                 else {
-                    squares[0][1] = color;
-                    squares[1][1] = color;
-                    squares[2][1] = color;
-                    squares[3][1] = color;
+                    squares[0][0] = color;
+                    squares[1][0] = color;
+                    squares[2][0] = color;
+                    squares[3][0] = color;
                     lXpos += 1;
                     rXpos -= 2;
                     tYpos -= 1;
@@ -213,13 +212,13 @@ class Tetromino {
                     squares[1][1] = color;
                     squares[1][2] = color;
                     rXpos += 1;
-                    bYpos += 1;
+                    bYpos -= 1;
                 }
                 else {
+                    squares[3][0] = color;
                     squares[3][1] = color;
-                    squares[3][2] = color;
-                    squares[2][2] = color;
-                    squares[1][2] = color;
+                    squares[2][1] = color;
+                    squares[1][1] = color;
                     lXpos += 1;
                     bYpos += 1;
                 }
@@ -231,37 +230,42 @@ class Tetromino {
                     squares[3][0] = color;
                     squares[3][1] = color;
                     squares[3][2] = color;
-                    lXpos += 1;
+                    rXpos += 1;
                     tYpos += 1;
                 }
                 else if(orientation == 1) {
-                    squares[3][1] = color;
                     squares[1][0] = color;
                     squares[2][0] = color;
                     squares[3][0] = color;
+                    squares[3][1] = color;
                     rXpos -= 1;
                     tYpos -= 1;
                 }
                 else if(orientation == 2) {
+                    squares[3][0] = color;
                     squares[2][0] = color;
-                    squares[1][0] = color;
-                    squares[1][1] = color;
-                    squares[1][2] = color;
+                    squares[2][1] = color;
+                    squares[2][2] = color;
                     rXpos += 1;
-                    bYpos += 1;
+                    tYpos += 1;
                 }
                 else {
+                    squares[1][0] = color;
                     squares[1][1] = color;
-                    squares[3][2] = color;
-                    squares[2][2] = color;
-                    squares[1][2] = color;
+                    squares[2][1] = color;
+                    squares[3][1] = color;
+
                     lXpos += 1;
-                    bYpos += 1;
+                    tYpos -= 1;
                 }
 
                 break;
             
             case 4: //square piece. does nothing lol
+                    squares[2][0] = 'y';
+                    squares[2][1] = 'y';
+                    squares[3][0] = 'y';
+                    squares[3][1] = 'y';
                 break;
 
             case 5: //z piece
@@ -309,7 +313,7 @@ class Tetromino {
                     squares[3][0] = color;
                     squares[3][1] = color;
                     squares[3][2] = color;
-                    lXpos += 1;
+                    rXpos += 1;
                     tYpos += 1;
                 }
                 else if(orientation == 1) {
@@ -321,20 +325,20 @@ class Tetromino {
                     tYpos -= 1;
                 }
                 else if(orientation == 2) {
+                    squares[2][0] = color;
                     squares[2][1] = color;
-                    squares[1][0] = color;
-                    squares[1][1] = color;
-                    squares[1][2] = color;
+                    squares[2][2] = color;
+                    squares[3][1] = color;
                     rXpos += 1;
-                    bYpos += 1;
+                    tYpos += 1;
                 }
                 else {
+                    squares[2][0] = color;
+                    squares[3][1] = color;
                     squares[2][1] = color;
-                    squares[3][2] = color;
-                    squares[2][2] = color;
-                    squares[1][2] = color;
-                    lXpos += 1;
-                    bYpos += 1;
+                    squares[1][1] = color;
+                    rXpos -= 1;
+                    tYpos -= 1;
                 }
 
 
