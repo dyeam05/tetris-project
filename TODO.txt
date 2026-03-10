@@ -1,10 +1,12 @@
 TODO:
-- continue fixing piece rotate function
-- fix bottom collision detection logic
+- fix collision detection logic
+- fix keyboard input event handlers to allow keys being held
+- continue tweaking piece rotate function
 - add wait time for pieces to be locked
+- add lines cleared variable
 - use game piece vector as stack. pop pieces from stack when they are stuck in place.
-- add event listeners/handlers for keyboard input
 - add variables for game level
 - add variables to control game speed with level increase
 - add scoring logic
 - add next queue for pieces to be generated before being in play
+- add hold state for pieces

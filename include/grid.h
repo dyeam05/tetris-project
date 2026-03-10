@@ -192,6 +192,18 @@ class Grid {
         return check;
     }
 
+    int multiClear(Tetromino* piece) {
+        int totalLines = 0;
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            if(checkFullRow(i)) {
+                totalLines++;
+                lineClear(i);
+                lineShift(i);
+            }
+        }
+        return totalLines;
+    }
+
     bool lineFilled(int line) {
         bool filled = true;
         for(int i = 0; i < 9; i++) {
@@ -208,19 +220,20 @@ class Grid {
 
     void lineShift(int line) {
         for(int i = line; i > 0; i--) {
-            for(int j = 0; j < 9; j++) {
+            for(int j = 0; j < 10; j++) {
                 grid[i][j] = grid[i-1][j];
             }
         }
     }
 
+    void clearGrid() {
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 10; j++) {
+                grid[i][j] = '0';
+            }
+        }
+    }
     
-    void multiClear(int lines);
-    
-    //rotates piece CLOCKWISE by 90 degrees
-    void rotate(Tetromino* piece) {
-        
-    } 
 };
 
 #endif

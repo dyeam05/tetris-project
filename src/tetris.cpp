@@ -37,14 +37,13 @@ static const int boardStartingY = 50;
 //game variables
 static int score = 0; //global score variable. stores the current game score
 static int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
-static int linesCleared; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
+static int linesCleared = 0; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
 static int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
-
 
 //------------------------------------------------------------------------------------//
 //Create Game objects and structures
 Rectangle gameBoard = {boardStartingX-10, boardStartingY-10, boardWidth+20, boardHeight+20};
-Rectangle nextWindow = {boardStartingX - nextWidth - 50, 200, nextWidth, nextHeight};
+Rectangle nextWindow = {boardStartingX - nextWidth - 50, 250, nextWidth, nextHeight};
 Grid gameGrid;
 std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
@@ -75,6 +74,14 @@ Color charToColor(char c) {
 	return BLACK;
 }
 
+void restartGame() {
+	gameOver = false;
+	gameGrid.clearGrid();
+	pieces.clear();
+	score = 0;
+	level = 0;
+	linesCleared = 0;
+}
 
 
 //----------------------------------------------------------------------------------------//
@@ -106,10 +113,13 @@ int main ()
 
 		// draw game board using rectangle
 		DrawRectangleLinesEx(gameBoard, lineWeight, GRAY);
-
+		std::string lcString = "Lines: " + std::to_string(linesCleared);
+		char lcStoC[1024];
+		strcpy(lcStoC, lcString.c_str());
 		// draw scoreboard and next pieces
-		DrawText("Score: ", boardStartingX - nextWidth - 50,100,40, GRAY);
-		DrawText("Next:", boardStartingX - nextWidth - 50,150,40, GRAY);
+		DrawText(lcStoC, boardStartingX - nextWidth - 50, 100, 40, GRAY);
+		DrawText("Score: ", boardStartingX - nextWidth - 50,150,40, GRAY);
+		DrawText("Next:", boardStartingX - nextWidth - 50,200,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 
 		//if game over condition is false, continue to add pieces
@@ -147,10 +157,7 @@ int main ()
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {
 						pieces.back()->falling = false;
-						if(gameGrid.lineFilled(pieces.back()->bYpos)) {
-							gameGrid.lineClear(pieces.back()->bYpos);
-							gameGrid.lineShift(pieces.back()->bYpos);
-						}
+						linesCleared += gameGrid.multiClear(pieces.back());
 					}
 				}
 			}
@@ -167,6 +174,7 @@ int main ()
 		//if game over condition is true, stop the gameplay and display game over message.
 		else {
 			DrawText("Game Over", boardStartingX+50,100,100, GRAY);
+			if(IsKeyPressed(KEY_R)) restartGame();
 		}
 
 		// draw horizontal lines
