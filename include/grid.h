@@ -22,7 +22,7 @@ class Grid {
     Tetromino* pieces;
 
     //TODO: rewrite function to use piece coordinates to add piece to grid
-    void addTetromino(Tetromino* piece) {
+    void oldAddTetromino(Tetromino* piece) {
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 4; j++) {
                 if(piece->squares[i+2][j] != '0') grid[i][j+3] = piece->squares[i+2][j];
@@ -32,7 +32,7 @@ class Grid {
     }
 
 
-    void replaceTetromino(Tetromino* piece) {
+    void addTetromino(Tetromino* piece) {
         std::cout << "piece orientation: " << piece->orientation << std::endl; 
         std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
         int pieceX = 0;
@@ -59,7 +59,7 @@ class Grid {
 
             piece->rotate();
 
-            replaceTetromino(piece);
+            addTetromino(piece);
 
             printGrid();
         }

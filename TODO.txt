@@ -1,5 +1,6 @@
 TODO:
-- add piece rotate function (remember to rotate pieces CLOCKWISE)
+- continue fixing piece rotate function
+- fix bottom collision detection logic
 - add wait time for pieces to be locked
 - use game piece vector as stack. pop pieces from stack when they are stuck in place.
 - add event listeners/handlers for keyboard input
@@ -7,4 +8,3 @@ TODO:
 - add variables to control game speed with level increase
 - add scoring logic
 - add next queue for pieces to be generated before being in play
-- fix add piece logic for square and line piece
