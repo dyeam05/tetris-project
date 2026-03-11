@@ -10,3 +10,5 @@ TODO:
 - add scoring logic
 - add next queue for pieces to be generated before being in play
 - add hold state for pieces
+- add hard drop function
+- add ghost image for pieces to show where they would land

@@ -138,6 +138,7 @@ class Grid {
     //checks if space underneath current piece is occupied by previous piece
     bool bottomColCheck(Tetromino* piece) {
         bool check = false;
+        if(piece->bYpos == 19) return true;
         for(int i = piece->lXpos; i <= piece->rXpos; i++) {
             if(grid[piece->bYpos+1][i] != '0' && grid[piece->bYpos][i] != '0') {
                 check = true;
@@ -233,7 +234,7 @@ class Grid {
             }
         }
     }
-    
+
 };
 
 #endif
