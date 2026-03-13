@@ -1,30 +1,61 @@
 #include "tetromino.h"
 #include "grid.h"
 #include <iostream>
-
+#include <vector>
 
 
 int main() {
     Grid testGrid;
-    Tetromino* testPiece = new Tetromino(7);
-    testGrid.addTetromino(testPiece);
+    std::vector<Tetromino*> testPieces;
+    testPieces.push_back(new Tetromino(3));
+    testGrid.addTetromino(testPieces.back());
+    for(int i = 0; i < 5; i++) testGrid.movePiece(testPieces.back(), 'd');
+
+    testGrid.rotateTetromino(testPieces.back());
+    testGrid.rotateTetromino(testPieces.back());
+    std::cout << std::endl;
+
+    testGrid.grid[7][4] = 'b';
+    testGrid.grid[7][3] = 'b';
+
+    testGrid.printGrid();
+    std::cout << "bottom collision = " << testGrid.bottomColCheck(testPieces.back()) << std::endl;
+
+    std::cout << "lXpos: " << testPieces.back()->lXpos 
+    << " rXpos: " << testPieces.back()->rXpos << " tYpos: "  
+    << testPieces.back()->tYpos << " bYpos: " << testPieces.back()->bYpos << std::endl;
+
+    testPieces.back()->printTetromino();
+    std::cout << testPieces.back()->squares[3][0] << std::endl;
+    int k = 1;
+    int l = 0;
+
+    /*
+    std::cout << std::endl;
+    for(int i = 0; i < 19; i++) testGrid.movePiece(testPieces.back(), 'd');
+    testGrid.rotateTetromino(testPieces.back());
+
+    std::cout << std::endl; 
+
     testGrid.printGrid();
 
     std::cout << std::endl;
-    for(int i = 0; i < 4; i++) testGrid.movePiece(testPiece, 'd');
+
+    testPieces.back()->printTetromino();
+    std::cout << std::endl;
+
+    testPieces.push_back(new Tetromino(2));
+    testGrid.addTetromino(testPieces.back());
+    for(int i = 0; i < 10; i++) testGrid.movePiece(testPieces.back(), 'd');
+    testGrid.movePiece(testPieces.back(), 'l');
+    testGrid.rotateTetromino(testPieces.back());
+    std::cout << std::endl;
     testGrid.printGrid();
-
     std::cout << std::endl;
-
-    testPiece->printTetromino();
+    for(int i = 0; i < 5; i++) testGrid.movePiece(testPieces.back(), 'd');
+    testGrid.printGrid();
     std::cout << std::endl;
+    std::cout << testGrid.bottomColCheck(testPieces.back()) << std::endl;
 
-    for(int i = 0; i < 4; i++) {
-        std::cout << "Grid w/ rotated piece:" << std::endl;
-        testGrid.rotateTetromino(testPiece);
-        std::cout << "rotated piece" << std::endl;
-        testPiece->printTetromino();
-        //testGrid.printGrid();
-        std::cout << std::endl;
-    }
+    */
 }

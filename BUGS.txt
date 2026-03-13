@@ -1,4 +1,4 @@
 Bugs:
-- Rotated (long-wise) L and reverse L pieces do not fall all the way down
+- Vertical L and Reverse L pieces do not always properly fall. sometimes they take squares from other pieces.
 - Extra squares filled when rotating L and reverse L pieces
 - Some pieces "merge" when moving due to improper collision detection

@@ -33,14 +33,14 @@ class Grid {
 
 
     void addTetromino(Tetromino* piece) {
-        std::cout << "piece orientation: " << piece->orientation << std::endl; 
-        std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
+        //std::cout << "piece orientation: " << piece->orientation << std::endl; 
+        //std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
         int pieceX = 0;
         int pieceY = 3 - (piece->bYpos - piece->tYpos);
         for(int i = piece->tYpos; i <= piece->bYpos; i++) {
             for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                 grid[i][j] = piece->squares[pieceY][pieceX];
-                std::cout << "piece grid coords: (" << pieceY << ", " << pieceX << ")" << std::endl; 
+                //std::cout << "piece grid coords: (" << pieceY << ", " << pieceX << ")" << std::endl; 
                 pieceX++;
             }
             pieceY++;
@@ -61,7 +61,7 @@ class Grid {
 
             addTetromino(piece);
 
-            printGrid();
+            //printGrid();
         }
     }
 
@@ -99,7 +99,7 @@ class Grid {
                 break;
 
             case 'd':
-                if(piece->bYpos < 20 && !bottomColCheck(piece)) {
+                if(!bottomColCheck(piece)) {
                     for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                             if(grid[i][j] != '0') {
@@ -139,12 +139,26 @@ class Grid {
     bool bottomColCheck(Tetromino* piece) {
         bool check = false;
         if(piece->bYpos == 19) return true;
+        int k = 3;
+        int l = 0;
         for(int i = piece->lXpos; i <= piece->rXpos; i++) {
-            if(grid[piece->bYpos+1][i] != '0' && grid[piece->bYpos][i] != '0') {
-                check = true;
-                break;
+            k = 3;
+            for(int j = piece->bYpos; j >= piece->tYpos; j--) {
+                if(piece->squares[k][l] != '0' && (k==3 || piece->squares[k+1][l] == '0')) {
+                    std::cout << "Piece grid spot [" << k << "] [" << l << "] contains a filled square" << std::endl;
+                    if(grid[j][i] != '0' && grid[j+1][i] != '0') {
+                        std::cout << "Grid space [" << j+1 << "] [" << i << "] also contains a filled square";
+                        check = true;
+                        break;
+                    }
+                }
+                else std::cout << "Piece grid spot [" << k << "] [" << l << "] does not contain a filled square" << std::endl;
+                k--;
             }
+            l++;
+            if(check) break;
         }
+
         return check;
     }
 
