@@ -7,16 +7,18 @@
 int main() {
     Grid testGrid;
     std::vector<Tetromino*> testPieces;
-    testPieces.push_back(new Tetromino(3));
+    testPieces.push_back(new Tetromino(2));
     testGrid.addTetromino(testPieces.back());
-    for(int i = 0; i < 5; i++) testGrid.movePiece(testPieces.back(), 'd');
+    for(int i = 0; i < 4; i++) testGrid.movePiece(testPieces.back(), 'd');
+    for(int i = 0; i < 3; i++) testGrid.rotateTetromino(testPieces.back());
 
-    testGrid.rotateTetromino(testPieces.back());
-    testGrid.rotateTetromino(testPieces.back());
+
+
     std::cout << std::endl;
 
-    testGrid.grid[7][4] = 'b';
-    testGrid.grid[7][3] = 'b';
+    //testGrid.grid[5][4] = 'b';
+    //testGrid.grid[6][4] = 'b';
+    testGrid.grid[7][5] = 'g';
 
     testGrid.printGrid();
     std::cout << "bottom collision = " << testGrid.bottomColCheck(testPieces.back()) << std::endl;

@@ -100,13 +100,18 @@ class Grid {
 
             case 'd':
                 if(!bottomColCheck(piece)) {
+                    int pieceX = 0;
+                    int pieceY = 3;
                     for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                            if(grid[i][j] != '0') {
+                            if(grid[i][j] != '0' && piece->squares[pieceY][pieceX] != '0') {
                                 grid[i+1][j] = piece->color;
                                 grid[i][j] = '0';
                             }
+                            pieceX++;
                         }
+                        pieceY--;
+                        pieceX = 0;
                     }
                     piece->tYpos++;
                     piece->bYpos++;
