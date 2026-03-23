@@ -1,9 +1,8 @@
 TODO:
-- fix collision detection logic
-- fix keyboard input event handlers to allow keys being held
+- continue testing collision detection logic
 - continue tweaking piece rotate function
+- -FIX REVERSE L PIECE ROTATION
 - add wait time for pieces to be locked
-- add lines cleared variable
 - use game piece vector as stack. pop pieces from stack when they are stuck in place.
 - add variables for game level
 - add variables to control game speed with level increase
@@ -12,3 +11,4 @@ TODO:
 - add hold state for pieces
 - add hard drop function
 - add ghost image for pieces to show where they would land
+- add function for t-spin and mini-t-spin scoring logic

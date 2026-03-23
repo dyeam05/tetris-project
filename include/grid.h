@@ -150,14 +150,14 @@ class Grid {
             k = 3;
             for(int j = piece->bYpos; j >= piece->tYpos; j--) {
                 if(piece->squares[k][l] != '0' && (k==3 || piece->squares[k+1][l] == '0')) {
-                    std::cout << "Piece grid spot [" << k << "] [" << l << "] contains a filled square" << std::endl;
+                    //std::cout << "Piece grid spot [" << k << "] [" << l << "] contains a filled square" << std::endl;
                     if(grid[j][i] != '0' && grid[j+1][i] != '0') {
-                        std::cout << "Grid space [" << j+1 << "] [" << i << "] also contains a filled square";
+                        //std::cout << "Grid space [" << j+1 << "] [" << i << "] also contains a filled square";
                         check = true;
                         break;
                     }
                 }
-                else std::cout << "Piece grid spot [" << k << "] [" << l << "] does not contain a filled square" << std::endl;
+                //else std::cout << "Piece grid spot [" << k << "] [" << l << "] does not contain a filled square" << std::endl;
                 k--;
             }
             l++;

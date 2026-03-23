@@ -49,6 +49,7 @@ std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
 int framesCounter = 0;
 int inputBuffer = 0;
+int lockDelay = 0;
 bool gameOver = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -101,6 +102,7 @@ int main ()
 	{
 		//update frame count
 		framesCounter++;
+		inputBuffer++;
 
 		// drawing
 		BeginDrawing();
@@ -113,12 +115,18 @@ int main ()
 
 		// draw game board using rectangle
 		DrawRectangleLinesEx(gameBoard, lineWeight, GRAY);
+		
 		std::string lcString = "Lines: " + std::to_string(linesCleared);
 		char lcStoC[1024];
 		strcpy(lcStoC, lcString.c_str());
+
+		std::string scoreString = "Score: " + std::to_string(score);
+		char scoreSToC[1024];
+		strcpy(scoreSToC, scoreString.c_str());
+
 		// draw scoreboard and next pieces
 		DrawText(lcStoC, boardStartingX - nextWidth - 50, 100, 40, GRAY);
-		DrawText("Score: ", boardStartingX - nextWidth - 50,150,40, GRAY);
+		DrawText(scoreSToC, boardStartingX - nextWidth - 50,150,40, GRAY);
 		DrawText("Next:", boardStartingX - nextWidth - 50,200,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 
@@ -140,24 +148,47 @@ int main ()
 				gameGrid.addTetromino(pieces.back());
 			}
 			else {
-				if(IsKeyPressed(KEY_RIGHT)) {
+				if(IsKeyDown(KEY_RIGHT)) {
+					if(((inputBuffer/15)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'r');
+						inputBuffer = 0;
+					}
 				}
-				if(IsKeyPressed(KEY_LEFT)) {
-					gameGrid.movePiece(pieces.back(), 'l');
+				if(IsKeyDown(KEY_LEFT)) {
+					if(((inputBuffer/15)%2) == 1) {
+						gameGrid.movePiece(pieces.back(), 'l');
+						inputBuffer = 0;
+					}
 				}
-				if(IsKeyPressed(KEY_DOWN)) {
-					gameGrid.movePiece(pieces.back(), 'd');
+				if(IsKeyDown(KEY_DOWN)) {
+					if(((inputBuffer/15)%2) == 1) {
+						gameGrid.movePiece(pieces.back(), 'd');
+						score++;
+						inputBuffer = 0;
+					}
 				}
 				if(IsKeyPressed(KEY_UP)) {
 					gameGrid.rotateTetromino(pieces.back());
 				} 
+
+
+
  				if (((framesCounter/120)%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {
 						pieces.back()->falling = false;
-						linesCleared += gameGrid.multiClear(pieces.back());
+						int numLines = gameGrid.multiClear(pieces.back());
+						linesCleared += numLines;
+						if(linesCleared % 10 == 0 && numLines != 0) level++;
+						int lineScore = 0;
+						//replace this with math to calculate score instead of hardcoded numbers
+						if(numLines == 1) lineScore += 100;
+						if(numLines == 2) lineScore += 300;
+						if(numLines == 3) lineScore += 500;
+						if(numLines == 4) lineScore += 800;
+						score += lineScore * level;
+
 					}
 				}
 			}

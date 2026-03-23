@@ -1,4 +1,3 @@
 Bugs:
-- Vertical L and Reverse L pieces do not always properly fall. sometimes they take squares from other pieces.
+- Pieces can potentially phase through boundary walls and appear on next row
 - Extra squares filled when rotating L and reverse L pieces
-- Some pieces "merge" when moving due to improper collision detection
