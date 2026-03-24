@@ -36,7 +36,7 @@ static const int boardStartingY = 50;
 
 //game variables
 static int score = 0; //global score variable. stores the current game score
-static int level = 0; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
+static int level = 1; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
 static int linesCleared = 0; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
 static int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
 
@@ -124,10 +124,14 @@ int main ()
 		char scoreSToC[1024];
 		strcpy(scoreSToC, scoreString.c_str());
 
+		std::string levelString = "Level: " + std::to_string(level);
+		char lToC[1024];
+		strcpy(lToC, levelString.c_str());
+
 		// draw scoreboard and next pieces
 		DrawText(lcStoC, boardStartingX - nextWidth - 50, 100, 40, GRAY);
 		DrawText(scoreSToC, boardStartingX - nextWidth - 50,150,40, GRAY);
-		DrawText("Next:", boardStartingX - nextWidth - 50,200,40, GRAY);
+		DrawText(lToC, boardStartingX - nextWidth - 50,200,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 
 		//if game over condition is false, continue to add pieces
@@ -161,7 +165,7 @@ int main ()
 					}
 				}
 				if(IsKeyDown(KEY_DOWN)) {
-					if(((inputBuffer/15)%2) == 1) {
+					if(((inputBuffer/(15-level))%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'd');
 						score++;
 						inputBuffer = 0;
@@ -173,22 +177,17 @@ int main ()
 
 
 
- 				if (((framesCounter/120)%2) == 1) {
+ 				if (((framesCounter/(120-level))%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {
 						pieces.back()->falling = false;
 						int numLines = gameGrid.multiClear(pieces.back());
 						linesCleared += numLines;
-						if(linesCleared % 10 == 0 && numLines != 0) level++;
+						if((((linesCleared - (linesCleared % 10)) / 10)) > level-1) level++;
 						int lineScore = 0;
 						//replace this with math to calculate score instead of hardcoded numbers
-						if(numLines == 1) lineScore += 100;
-						if(numLines == 2) lineScore += 300;
-						if(numLines == 3) lineScore += 500;
-						if(numLines == 4) lineScore += 800;
-						score += lineScore * level;
-
+						if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * level;
 					}
 				}
 			}
