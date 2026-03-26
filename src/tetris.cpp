@@ -153,31 +153,34 @@ int main ()
 			}
 			else {
 				if(IsKeyDown(KEY_RIGHT)) {
-					if(((inputBuffer/15)%2) == 1) {
+					if(((inputBuffer/13)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'r');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_LEFT)) {
-					if(((inputBuffer/15)%2) == 1) {
+					if(((inputBuffer/13)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'l');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_DOWN)) {
-					if(((inputBuffer/(15-level))%2) == 1) {
+					if(((inputBuffer/12)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'd');
-						score++;
+						if(pieces.back()->falling) score++;
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyPressed(KEY_UP)) {
 					gameGrid.rotateTetromino(pieces.back());
+				}
+				if(IsKeyPressed(KEY_SPACE)) {
+					score += gameGrid.hardDrop(pieces.back());
 				} 
 
 
 
- 				if (((framesCounter/(120-level))%2) == 1) {
+ 				if (((framesCounter/(120-(level*5)))%2) == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {

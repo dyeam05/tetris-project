@@ -194,8 +194,8 @@ class Tetromino {
                     squares[3][0] = color;
                     squares[3][1] = color;
                     squares[3][2] = color;
-                    lXpos -= 1;
                     tYpos += 1;
+                    rXpos += 1;
                 }
                 else if(orientation == 1) {
                     squares[1][1] = color;
@@ -204,23 +204,22 @@ class Tetromino {
                     squares[3][0] = color;
                     rXpos -= 1;
                     tYpos -= 1;
-                    bYpos += 1;
                 }
                 else if(orientation == 2) {
+                    squares[2][0] = color;
+                    squares[2][1] = color;
                     squares[2][2] = color;
-                    squares[1][0] = color;
-                    squares[1][1] = color;
-                    squares[1][2] = color;
+                    squares[3][2] = color;
+                    tYpos += 1;
                     rXpos += 1;
-                    bYpos -= 1;
                 }
                 else {
                     squares[3][0] = color;
                     squares[3][1] = color;
                     squares[2][1] = color;
                     squares[1][1] = color;
-                    lXpos += 1;
-                    bYpos += 1;
+                    rXpos -= 1;
+                    tYpos -= 1;
                 }
                 break;
             

@@ -50,19 +50,18 @@ class Grid {
 
 
     void rotateTetromino(Tetromino* piece) {
-        if(!topColCheck(piece)) {
             for(int i = piece->tYpos; i <= piece->bYpos; i++) {
                 for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                     if(grid[i][j] != '0') grid[i][j] = '0';
                 }
             }
-
+            while(topColCheck(piece)) movePiece(piece, 'd');
+            if(leftColCheck(piece)) movePiece(piece, 'r');
+            if(rightColCheck(piece)) movePiece(piece, 'l');
             piece->rotate();
-
             addTetromino(piece);
 
             //printGrid();
-        }
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
@@ -252,6 +251,15 @@ class Grid {
                 grid[i][j] = '0';
             }
         }
+    }
+
+    int hardDrop(Tetromino* piece) {
+        int score = 0;
+        while(!bottomColCheck(piece)) {
+            movePiece(piece, 'd');
+            score++;
+        }
+        return score;
     }
 
 };
