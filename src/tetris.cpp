@@ -90,6 +90,7 @@ void lockPiece() {
 	lCleared += numLines;
 	if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
 	int lineScore = 0;
+	//replace this with math to calculate score instead of hardcoded numbers
 	if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
 }
 
@@ -112,7 +113,7 @@ int main ()
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
-		//update frame count
+		//update frame counts
 		frameCtr++;
 		inputBuffer++;
 
@@ -125,24 +126,32 @@ int main ()
 		// draw some text using the default font
 		DrawText("Tetris", wWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
 
-		// draw game board using rectangle
+		// draw game board using rectangle struct
 		DrawRectangleLinesEx(gameBoard, lWeight, GRAY);
 
 		//displays FPS in top-left corner of screen. For debugging and optimization
 		DrawFPS(10, 10);
 		
+		//uses std::string objects to store and display line count string
 		std::string lcString = "Lines: " + std::to_string(lCleared);
 		char lcStoC[1024];
+		//converts line count string to standard C string, then to char array
 		strcpy(lcStoC, lcString.c_str());
 
+		//same thing, but for score
 		std::string scoreString = "Score: " + std::to_string(score);
 		char scoreSToC[1024];
 		strcpy(scoreSToC, scoreString.c_str());
 
+		//same thing again, but for game level
 		std::string lvlString = "lvl: " + std::to_string(lvl);
 		char lToC[1024];
 		strcpy(lToC, lvlString.c_str());
 		
+		//-----FOR DEBUGGING PURPOSES-----//
+		//Does the same as the above, but displays the frame counter variable.
+		//Also displays the logic for dropping pieces
+		//When the frame counter matches the piece drop timing logic, the text is green
 		std::string frames = "framectr: " + std::to_string(frameCtr);
 		char fToC[1024];
 		strcpy(fToC, frames.c_str());
@@ -156,6 +165,7 @@ int main ()
 		char fallC[1024];
 		strcpy(fallC, fall.c_str());
 		DrawText(fallC, 10, 70, 20, GRAY);
+		//---------//
 
 		// draw scoreboard and next pieces
 		DrawText(lcStoC, bStartX - nWidth - 50, 100, 40, GRAY);
@@ -182,19 +192,19 @@ int main ()
 			}
 			else {
 				if(IsKeyDown(KEY_RIGHT)) {
-					if(((inputBuffer/7)%2) == 1) {
+					if(((inputBuffer/6)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'r');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_LEFT)) {
-					if(((inputBuffer/7)%2) == 1) {
+					if(((inputBuffer/6)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'l');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_DOWN)) {
-					if(((inputBuffer/7)%2) == 1) {
+					if(((inputBuffer/6)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'd');
 						if(!gameGrid.finishedFalling(pieces.back())) { 
 							score++;
@@ -210,20 +220,13 @@ int main ()
 				}
 				if(IsKeyPressed(KEY_SPACE)) {
 					score += gameGrid.hardDrop(pieces.back());
+					lockPiece();
 				} 
 
-				//logic to move pieces down based on lvl and frame count. Needs Fixing
-				//
  				if ((frameCtr / (60 - (59*(lvl-1)/24)) ) % 2 == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
 					if(gameGrid.finishedFalling(pieces.back())) {
-						pieces.back()->falling = false;
-						int numLines = gameGrid.multiClear(pieces.back());
-						lCleared += numLines;
-						if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
-						int lineScore = 0;
-						//replace this with math to calculate score instead of hardcoded numbers
-						if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
+						lockPiece();
 					}
 					frameCtr = 0;
 				}
