@@ -23,31 +23,31 @@
 
 //-------------------------------------------------------------------------------------------------------------------------------//
 //constants
-static const int windowWidth = 1280;
-static const int windowHeight = 720;
-static const int boardWidth = 300;	//arbitrary values for testing, will fix later
-static const int boardHeight = 600;
-static const int nextWidth = 200;
-static const int nextHeight = 250;
-static const int lineWeight = 10;
-static const int squareSize = boardWidth / 10;
-static const int boardStartingX = windowWidth/2 - boardWidth / 2;
-static const int boardStartingY = 50;
+static const int wWidth = 1280;
+static const int wHeight = 720;
+static const int bWidth = 300;	//arbitrary values for testing, will fix later
+static const int bHeight = 600;
+static const int nWidth = 200;
+static const int nHeight = 250;
+static const int lWeight = 10;
+static const int sSize = bWidth / 10;
+static const int bStartX = wWidth/2 - bWidth / 2;
+static const int bStartY = 50;
 
 //game variables
 static int score = 0; //global score variable. stores the current game score
-static int level = 1; //global level variable. stores the current game level. level increases 1 time for ever 10 lines cleared. 
-static int linesCleared = 0; //global variable storing total lines cleared. level increases 1 time for ever 10 lines cleared.
-static int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every level up.
+static int lvl = 1; //global lvl variable. stores the current game lvl. lvl increases 1 time for ever 10 lines cleared. 
+static int lCleared = 0; //global variable storing total lines cleared. lvl increases 1 time for ever 10 lines cleared.
+static int fallingSpeed; //global variable storing the speed in which the tetrominos fall. speed is increased every lvl up.
 
 //------------------------------------------------------------------------------------//
 //Create Game objects and structures
-Rectangle gameBoard = {boardStartingX-10, boardStartingY-10, boardWidth+20, boardHeight+20};
-Rectangle nextWindow = {boardStartingX - nextWidth - 50, 250, nextWidth, nextHeight};
+Rectangle gameBoard = {bStartX-10, bStartY-10, bWidth+20, bHeight+20};
+Rectangle nextWindow = {bStartX - nWidth - 50, 250, nWidth, nHeight};
 Grid gameGrid;
 std::vector<Tetromino*> pieces;
 int randValue = GetRandomValue(1, 7);
-int framesCounter = 0;
+int frameCtr = 0;
 int inputBuffer = 0;
 int lockDelay = 0;
 bool gameOver = false;
@@ -80,8 +80,17 @@ void restartGame() {
 	gameGrid.clearGrid();
 	pieces.clear();
 	score = 0;
-	level = 0;
-	linesCleared = 0;
+	lvl = 1;
+	lCleared = 0;
+}
+
+void lockPiece() {
+	pieces.back()->falling = false;
+	int numLines = gameGrid.multiClear(pieces.back());
+	lCleared += numLines;
+	if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
+	int lineScore = 0;
+	if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
 }
 
 
@@ -92,7 +101,10 @@ int main ()
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 	// Create the window and OpenGL context
-	InitWindow(windowWidth, windowHeight, "Tetris");
+	InitWindow(wWidth, wHeight, "Tetris");
+
+	//Sets target FPS to 60
+	SetTargetFPS(60);
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
@@ -101,7 +113,7 @@ int main ()
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
 		//update frame count
-		framesCounter++;
+		frameCtr++;
 		inputBuffer++;
 
 		// drawing
@@ -111,12 +123,15 @@ int main ()
 		ClearBackground(WHITE);
 
 		// draw some text using the default font
-		DrawText("Tetris", windowWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
+		DrawText("Tetris", wWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
 
 		// draw game board using rectangle
-		DrawRectangleLinesEx(gameBoard, lineWeight, GRAY);
+		DrawRectangleLinesEx(gameBoard, lWeight, GRAY);
+
+		//displays FPS in top-left corner of screen. For debugging and optimization
+		DrawFPS(10, 10);
 		
-		std::string lcString = "Lines: " + std::to_string(linesCleared);
+		std::string lcString = "Lines: " + std::to_string(lCleared);
 		char lcStoC[1024];
 		strcpy(lcStoC, lcString.c_str());
 
@@ -124,14 +139,28 @@ int main ()
 		char scoreSToC[1024];
 		strcpy(scoreSToC, scoreString.c_str());
 
-		std::string levelString = "Level: " + std::to_string(level);
+		std::string lvlString = "lvl: " + std::to_string(lvl);
 		char lToC[1024];
-		strcpy(lToC, levelString.c_str());
+		strcpy(lToC, lvlString.c_str());
+		
+		std::string frames = "framectr: " + std::to_string(frameCtr);
+		char fToC[1024];
+		strcpy(fToC, frames.c_str());
+		int fallFrame;
+		if((frameCtr/(60 - (59/24)*(lvl-1))) % 2 == 1) {
+			DrawText(fToC, 10, 50, 20, GREEN);
+			fallFrame = frameCtr; //(frameCtr/(60 - (59/24)*(lvl-1))) % 2;
+		}
+		else DrawText(fToC, 10, 50, 20, GRAY);
+		std::string fall = "final frame before fall: " + std::to_string(fallFrame) + " fall formula: " + std::to_string(((60 - (59*(lvl-1)/24))));
+		char fallC[1024];
+		strcpy(fallC, fall.c_str());
+		DrawText(fallC, 10, 70, 20, GRAY);
 
 		// draw scoreboard and next pieces
-		DrawText(lcStoC, boardStartingX - nextWidth - 50, 100, 40, GRAY);
-		DrawText(scoreSToC, boardStartingX - nextWidth - 50,150,40, GRAY);
-		DrawText(lToC, boardStartingX - nextWidth - 50,200,40, GRAY);
+		DrawText(lcStoC, bStartX - nWidth - 50, 100, 40, GRAY);
+		DrawText(scoreSToC, bStartX - nWidth - 50,150,40, GRAY);
+		DrawText(lToC, bStartX - nWidth - 50,200,40, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 
 		//if game over condition is false, continue to add pieces
@@ -153,21 +182,26 @@ int main ()
 			}
 			else {
 				if(IsKeyDown(KEY_RIGHT)) {
-					if(((inputBuffer/13)%2) == 1) {
+					if(((inputBuffer/7)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'r');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_LEFT)) {
-					if(((inputBuffer/13)%2) == 1) {
+					if(((inputBuffer/7)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'l');
 						inputBuffer = 0;
 					}
 				}
 				if(IsKeyDown(KEY_DOWN)) {
-					if(((inputBuffer/12)%2) == 1) {
+					if(((inputBuffer/7)%2) == 1) {
 						gameGrid.movePiece(pieces.back(), 'd');
-						if(pieces.back()->falling) score++;
+						if(!gameGrid.finishedFalling(pieces.back())) { 
+							score++;
+						}
+						else {
+							pieces.back()->falling = false;
+						}
 						inputBuffer = 0;
 					}
 				}
@@ -178,20 +212,20 @@ int main ()
 					score += gameGrid.hardDrop(pieces.back());
 				} 
 
-
-
- 				if (((framesCounter/(120-(level*5)))%2) == 1) {
+				//logic to move pieces down based on lvl and frame count. Needs Fixing
+				//
+ 				if ((frameCtr / (60 - (59*(lvl-1)/24)) ) % 2 == 1) {
 					gameGrid.movePiece(pieces.back(), 'd');
-					framesCounter = 0;
 					if(gameGrid.finishedFalling(pieces.back())) {
 						pieces.back()->falling = false;
 						int numLines = gameGrid.multiClear(pieces.back());
-						linesCleared += numLines;
-						if((((linesCleared - (linesCleared % 10)) / 10)) > level-1) level++;
+						lCleared += numLines;
+						if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
 						int lineScore = 0;
 						//replace this with math to calculate score instead of hardcoded numbers
-						if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * level;
+						if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
 					}
+					frameCtr = 0;
 				}
 			}
 
@@ -199,25 +233,25 @@ int main ()
 			for(int i = 0; i < 20; i++) {
 				for(int j = 0; j < 10; j++) {
 					if(gameGrid.grid[i][j] != '0') {
-						DrawRectangle(boardStartingX+squareSize*j, boardStartingY+squareSize*i, squareSize, squareSize, charToColor(gameGrid.grid[i][j]));
+						DrawRectangle(bStartX+sSize*j, bStartY+sSize*i, sSize, sSize, charToColor(gameGrid.grid[i][j]));
 					}
 				}
 			}
 		}
 		//if game over condition is true, stop the gameplay and display game over message.
 		else {
-			DrawText("Game Over", boardStartingX+50,100,100, GRAY);
+			DrawText("Game Over", bStartX+50,100,100, GRAY);
 			if(IsKeyPressed(KEY_R)) restartGame();
 		}
 
 		// draw horizontal lines
 		for(int i = 1; i <= 20; i++) {
-			DrawLine(boardStartingX, 50+squareSize*i, boardStartingX + boardWidth, 50+squareSize*i, GRAY);
+			DrawLine(bStartX, 50+sSize*i, bStartX + bWidth, 50+sSize*i, GRAY);
 		}
 
 		// draw vertical lines
 		for(int i = 1; i <= 10; i++) {
-			DrawLine(boardStartingX + squareSize*i, 50, boardStartingX + squareSize*i, 50+boardHeight, GRAY);
+			DrawLine(bStartX + sSize*i, 50, bStartX + sSize*i, 50+bHeight, GRAY);
 		}
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
