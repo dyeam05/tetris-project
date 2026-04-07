@@ -21,20 +21,10 @@ class Grid {
     char grid[20][10];
     Tetromino* pieces;
 
-    //TODO: rewrite function to use piece coordinates to add piece to grid
-    void oldAddTetromino(Tetromino* piece) {
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 4; j++) {
-                if(piece->squares[i+2][j] != '0') grid[i][j+3] = piece->squares[i+2][j];
-            }
-        }
-        numSquares += 4;
-    }
-
-
     void addTetromino(Tetromino* piece) {
         //std::cout << "piece orientation: " << piece->orientation << std::endl; 
         //std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
+        //Builds piece from Top-Left to Bottom-Right
         int pieceX = 0;
         int pieceY = 3 - (piece->bYpos - piece->tYpos);
         for(int i = piece->tYpos; i <= piece->bYpos; i++) {
@@ -47,21 +37,34 @@ class Grid {
             pieceX = 0;
         }
     }
-
-
-    void rotateTetromino(Tetromino* piece) {
-            for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-                for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                    if(grid[i][j] != '0') grid[i][j] = '0';
-                }
+    void removeTetromino(Tetromino* piece) {
+        int k = 3 - (piece->bYpos - piece->tYpos);
+        int l = 0;
+        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+            for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                if(grid[i][j] != '0' && piece->squares[k][l] != '0') grid[i][j] = '0';
+                l++;
             }
-            while(topColCheck(piece)) movePiece(piece, 'd');
-            if(leftColCheck(piece)) movePiece(piece, 'r');
-            if(rightColCheck(piece)) movePiece(piece, 'l');
-            piece->rotate();
-            addTetromino(piece);
+            k++;
+            l = 0;
+        }
+
+    }
+    void rotateTetromino(Tetromino* piece) {
+        removeTetromino(piece);
+        while(topColCheck(piece)) movePiece(piece, 'd');
+        if(leftColCheck(piece)) movePiece(piece, 'r');
+        if(rightColCheck(piece)) movePiece(piece, 'l');
+        piece->rotate();
+        addTetromino(piece);
 
             //printGrid();
+    }
+
+    void ghostRotate(Tetromino* piece, Tetromino* ghostPiece) {
+        removeTetromino(ghostPiece);
+        ghostPiece->rotate();
+        addGhost(piece, ghostPiece);
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
@@ -119,6 +122,13 @@ class Grid {
                 break;
         }
     }
+
+    void addGhost(Tetromino* piece, Tetromino* ghostPiece) {
+        ghostPiece->initGhost(piece);
+        addTetromino(ghostPiece);
+        hardDrop(ghostPiece);
+    }
+
     void printGrid() {
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 10; j++) {
@@ -165,7 +175,7 @@ class Grid {
 
         return check;
     }
-
+    //weird crash caused by this. idk what the problem is yet
     bool topColCheck(Tetromino* piece) {
         bool check = false;
         if(piece->tYpos == 0) return true;

@@ -46,11 +46,13 @@ Rectangle gameBoard = {bStartX-10, bStartY-10, bWidth+20, bHeight+20};
 Rectangle nextWindow = {bStartX - nWidth - 50, 250, nWidth, nHeight};
 Grid gameGrid;
 std::vector<Tetromino*> pieces;
+Tetromino* ghostPiece = new Tetromino;
 int randValue = GetRandomValue(1, 7);
 int frameCtr = 0;
 int inputBuffer = 0;
 int lockDelay = 0;
 bool gameOver = false;
+bool pause = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------//
@@ -71,6 +73,8 @@ Color charToColor(char c) {
 			return PURPLE;
 		case 'r':
 			return RED;
+		case 'G':
+			return GRAY;
 	}
 	return BLACK;
 }
@@ -93,7 +97,6 @@ void lockPiece() {
 	//replace this with math to calculate score instead of hardcoded numbers
 	if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
 }
-
 
 //----------------------------------------------------------------------------------------//
 int main ()
@@ -148,26 +151,8 @@ int main ()
 		char lToC[1024];
 		strcpy(lToC, lvlString.c_str());
 		
-		//-----FOR DEBUGGING PURPOSES-----//
-		//Does the same as the above, but displays the frame counter variable.
-		//Also displays the logic for dropping pieces
-		//When the frame counter matches the piece drop timing logic, the text is green
-		std::string frames = "framectr: " + std::to_string(frameCtr);
-		char fToC[1024];
-		strcpy(fToC, frames.c_str());
-		int fallFrame;
-		if((frameCtr/(60 - (59/24)*(lvl-1))) % 2 == 1) {
-			DrawText(fToC, 10, 50, 20, GREEN);
-			fallFrame = frameCtr; //(frameCtr/(60 - (59/24)*(lvl-1))) % 2;
-		}
-		else DrawText(fToC, 10, 50, 20, GRAY);
-		std::string fall = "final frame before fall: " + std::to_string(fallFrame) + " fall formula: " + std::to_string(((60 - (59*(lvl-1)/24))));
-		char fallC[1024];
-		strcpy(fallC, fall.c_str());
-		DrawText(fallC, 10, 70, 20, GRAY);
-		//---------//
 
-		// draw scoreboard and next pieces
+		//draw scoreboard and next pieces
 		DrawText(lcStoC, bStartX - nWidth - 50, 100, 40, GRAY);
 		DrawText(scoreSToC, bStartX - nWidth - 50,150,40, GRAY);
 		DrawText(lToC, bStartX - nWidth - 50,200,40, GRAY);
@@ -175,64 +160,79 @@ int main ()
 
 		//if game over condition is false, continue to add pieces
 		if(!gameOver) {
-			//add new piece to matrix when previous piece has finished falling
-			if(pieces.size() == 0 || !(pieces.back()->falling)) {
-				randValue = GetRandomValue(1, 7);
-				if(pieces.size() > 0) {
-					if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
-						gameOver = true;
-					}
-					else {
-						pieces.erase(pieces.begin());
-					}
-				}
-				pieces.push_back(new Tetromino(randValue));
-				pieces.back()->falling = true;
-				gameGrid.addTetromino(pieces.back());
-			}
-			else {
-				if(IsKeyDown(KEY_RIGHT)) {
-					if(((inputBuffer/6)%2) == 1) {
-						gameGrid.movePiece(pieces.back(), 'r');
-						inputBuffer = 0;
-					}
-				}
-				if(IsKeyDown(KEY_LEFT)) {
-					if(((inputBuffer/6)%2) == 1) {
-						gameGrid.movePiece(pieces.back(), 'l');
-						inputBuffer = 0;
-					}
-				}
-				if(IsKeyDown(KEY_DOWN)) {
-					if(((inputBuffer/6)%2) == 1) {
-						gameGrid.movePiece(pieces.back(), 'd');
-						if(!gameGrid.finishedFalling(pieces.back())) { 
-							score++;
+			//pauses game if condition is true
+			if(!pause) {
+				//add new piece to matrix when previous piece has finished falling
+				if(pieces.size() == 0 || !(pieces.back()->falling)) {
+					randValue = GetRandomValue(1, 7);
+					if(pieces.size() > 0) {
+						if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
+							gameOver = true;
 						}
 						else {
-							pieces.back()->falling = false;
+							pieces.erase(pieces.begin());
 						}
-						inputBuffer = 0;
 					}
+					pieces.push_back(new Tetromino(randValue));
+					pieces.back()->falling = true;
+					gameGrid.addTetromino(pieces.back());
+					gameGrid.addGhost(pieces.back(), ghostPiece);
 				}
-				if(IsKeyPressed(KEY_UP)) {
-					gameGrid.rotateTetromino(pieces.back());
-				}
-				if(IsKeyPressed(KEY_SPACE)) {
-					score += gameGrid.hardDrop(pieces.back());
-					lockPiece();
-				} 
-
- 				if ((frameCtr / (60 - (59*(lvl-1)/24)) ) % 2 == 1) {
-					gameGrid.movePiece(pieces.back(), 'd');
-					if(gameGrid.finishedFalling(pieces.back())) {
+				//controls the movement of the active piece. Keyboard input is read to move pieces.
+				else {
+					if(IsKeyDown(KEY_RIGHT)) {
+						if(((inputBuffer/6)%2) == 1) {
+							gameGrid.movePiece(pieces.back(), 'r');
+							gameGrid.removeTetromino(ghostPiece);
+							gameGrid.addGhost(pieces.back(), ghostPiece);
+							inputBuffer = 0;
+						}
+					}
+					if(IsKeyDown(KEY_LEFT)) {
+						if(((inputBuffer/6)%2) == 1) {
+							gameGrid.movePiece(pieces.back(), 'l');
+							gameGrid.removeTetromino(ghostPiece);
+							gameGrid.addGhost(pieces.back(), ghostPiece);
+							inputBuffer = 0;
+						}
+					}
+					//moves active piece down and increase score each grid spot
+					if(IsKeyDown(KEY_DOWN)) {
+						if(((inputBuffer/6)%2) == 1) {
+							gameGrid.movePiece(pieces.back(), 'd');
+							if(!gameGrid.finishedFalling(pieces.back())) { 
+								score++;
+							}
+							else {
+								lockPiece();
+							}
+							inputBuffer = 0;
+						}
+					}
+					if(IsKeyPressed(KEY_UP)) {
+						gameGrid.rotateTetromino(pieces.back());
+						gameGrid.ghostRotate(pieces.back(), ghostPiece);
+					}
+					if(IsKeyPressed(KEY_SPACE)) {
+						gameGrid.removeTetromino(ghostPiece);
+						score += gameGrid.hardDrop(pieces.back());
 						lockPiece();
 					}
-					frameCtr = 0;
+					
+					//Active piece automatically moves down when a certain amount of time has passed
+					if ((frameCtr / (60 - (59*(lvl-1)/24)) ) % 2 == 1) {
+						gameGrid.movePiece(pieces.back(), 'd');
+						if(gameGrid.finishedFalling(pieces.back())) {
+							lockPiece();
+						}
+						frameCtr = 0;
+					}
 				}
 			}
-
-			// add pieces to board
+			if(IsKeyPressed(KEY_P)) {
+				pause = !pause;
+			}
+			// add pieces to board from grid object
 			for(int i = 0; i < 20; i++) {
 				for(int j = 0; j < 10; j++) {
 					if(gameGrid.grid[i][j] != '0') {
@@ -240,8 +240,10 @@ int main ()
 					}
 				}
 			}
+
 		}
 		//if game over condition is true, stop the gameplay and display game over message.
+		//Game can be restarted from here by pressing R key
 		else {
 			DrawText("Game Over", bStartX+50,100,100, GRAY);
 			if(IsKeyPressed(KEY_R)) restartGame();

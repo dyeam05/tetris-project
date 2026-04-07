@@ -24,17 +24,47 @@ class Tetromino {
     // Default Constructor. sets all int values to 0, color value to empty char and falling to false.
     Tetromino() { 
         id = 0;
-        color = ' ';
+        color = 'G';
         lXpos = 0;
         rXpos = 0;
         tYpos = 0;
         bYpos = 0;
         falling = false;
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++) {
+                squares[i][j] = '0';
+            }
+        }
     }
 
     Tetromino(int id) {
         this->id = id;
-        color = '0';
+        switch (id) {
+            case 1:
+                color = 't';
+                break;
+            case 2:
+                color = 'b';
+                break;
+            case 3:
+                color = 'o';
+                break;
+            case 4: 
+                color = 'y';
+                break;
+            case 5:
+                color = 'r';
+                break;
+            case 6:
+                color = 'g';
+                break;
+            case 7:
+                color = 'p';
+                break;
+            default:
+                color = '0';
+        }
         falling = true;
 
         for(int i = 0; i < 4; i++){
@@ -45,15 +75,41 @@ class Tetromino {
 
         buildTetromino();
     }
- 
+
+    void initGhost(Tetromino* piece) {
+        clearTetromino();
+        lXpos = piece->lXpos;
+        rXpos = piece->rXpos;
+        tYpos = piece->bYpos + 1;
+        bYpos = tYpos + (piece->bYpos - piece->tYpos);
+        id = piece->id;
+        color = 'G';
+        buildGhost(piece);
+    }
+
+    void clearTetromino() {
+        id = 0;
+        color = 'G';
+        lXpos = 0;
+        rXpos = 0;
+        tYpos = 0;
+        bYpos = 0;
+        falling = false;
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++) {
+                squares[i][j] = '0';
+            }
+        }
+    }
+    
     void buildTetromino() {
         switch (id) {
             case 1: //straight line piece
-                color = 't';
-                squares[3][0] = 't';
-                squares[3][1] = 't';
-                squares[3][2] = 't';
-                squares[3][3] = 't';
+                squares[3][0] = color;
+                squares[3][1] = color;
+                squares[3][2] = color;
+                squares[3][3] = color;
                 lXpos = 3;
                 rXpos = 6;
                 tYpos = 0;
@@ -61,11 +117,10 @@ class Tetromino {
                 break;
             
             case 2: //reverse l piece
-                color = 'b';
-                squares[2][0] = 'b';
-                squares[3][0] = 'b';
-                squares[3][1] = 'b';
-                squares[3][2] = 'b';
+                squares[2][0] = color;
+                squares[3][0] = color;
+                squares[3][1] = color;
+                squares[3][2] = color;
                 lXpos = 3;
                 rXpos = 5;
                 tYpos = 0;
@@ -73,11 +128,10 @@ class Tetromino {
                 break;
             
             case 3: //l piece
-                color = 'o';
-                squares[2][2] = 'o';
-                squares[3][0] = 'o';
-                squares[3][1] = 'o';
-                squares[3][2] = 'o';
+                squares[2][2] = color;
+                squares[3][0] = color;
+                squares[3][1] = color;
+                squares[3][2] = color;
                 lXpos = 3;
                 rXpos = 5;
                 tYpos = 0;
@@ -85,11 +139,10 @@ class Tetromino {
                 break;
             
             case 4: //square piece
-                color = 'y';
-                squares[2][0] = 'y';
-                squares[2][1] = 'y';
-                squares[3][0] = 'y';
-                squares[3][1] = 'y';
+                squares[2][0] = color;
+                squares[2][1] = color;
+                squares[3][0] = color;
+                squares[3][1] = color;
                 lXpos = 4;
                 rXpos = 5;
                 tYpos = 0;
@@ -97,11 +150,10 @@ class Tetromino {
                 break;
 
             case 5: //z piece
-                color = 'g';
-                squares[2][0] = 'g';
-                squares[2][1] = 'g';
-                squares[3][1] = 'g';
-                squares[3][2] = 'g';
+                squares[2][0] = color;
+                squares[2][1] = color;
+                squares[3][1] = color;
+                squares[3][2] = color;
                 lXpos = 3;
                 rXpos = 5;
                 tYpos = 0;
@@ -109,11 +161,10 @@ class Tetromino {
                 break;
 
             case 6: //reverse z piece
-                color = 'p';
-                squares[2][1] = 'p';
-                squares[2][2] = 'p';
-                squares[3][0] = 'p';
-                squares[3][1] = 'p';
+                squares[2][1] = color;
+                squares[2][2] = color;
+                squares[3][0] = color;
+                squares[3][1] = color;
                 lXpos = 3;
                 rXpos = 5;
                 tYpos = 0;
@@ -121,11 +172,10 @@ class Tetromino {
                 break;
 
             case 7: //t piece
-                color = 'r';
-                squares[2][1] = 'r';
-                squares[3][0] = 'r';
-                squares[3][1] = 'r';
-                squares[3][2] = 'r';
+                squares[2][1] = color;
+                squares[3][0] = color;
+                squares[3][1] = color;
+                squares[3][2] = color;
                 lXpos = 3;
                 rXpos = 5;
                 tYpos = 0;
@@ -134,6 +184,17 @@ class Tetromino {
                 break;
         }
     }
+
+    void buildGhost(Tetromino* piece) {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                squares[i][j] = piece->squares[i][j];
+            }
+        }
+    }
+
+
+    
 
     void clear() {
         for(int i = 0; i < 4; i++) {
@@ -261,10 +322,10 @@ class Tetromino {
                 break;
             
             case 4: //square piece. does nothing lol
-                    squares[2][0] = 'y';
-                    squares[2][1] = 'y';
-                    squares[3][0] = 'y';
-                    squares[3][1] = 'y';
+                    squares[2][0] = color;
+                    squares[2][1] = color;
+                    squares[3][0] = color;
+                    squares[3][1] = color;
                 break;
 
             case 5: //z piece
