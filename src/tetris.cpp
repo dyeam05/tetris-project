@@ -46,6 +46,7 @@ Rectangle gameBoard = {bStartX-10, bStartY-10, bWidth+20, bHeight+20};
 Rectangle nextWindow = {bStartX - nWidth - 50, 250, nWidth, nHeight};
 Grid gameGrid;
 std::vector<Tetromino*> pieces;
+Tetromino* activePiece = new Tetromino;
 Tetromino* ghostPiece = new Tetromino;
 int randValue = GetRandomValue(1, 7);
 int frameCtr = 0;
@@ -53,6 +54,8 @@ int inputBuffer = 0;
 int lockDelay = 0;
 bool gameOver = false;
 bool pause = false;
+bool lockCheck = false;
+bool newPiece = true;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------//
@@ -82,20 +85,23 @@ Color charToColor(char c) {
 void restartGame() {
 	gameOver = false;
 	gameGrid.clearGrid();
-	pieces.clear();
 	score = 0;
 	lvl = 1;
 	lCleared = 0;
 }
 
 void lockPiece() {
-	pieces.back()->falling = false;
-	int numLines = gameGrid.multiClear(pieces.back());
+	activePiece->falling = false;
+	int numLines = gameGrid.multiClear(activePiece);
 	lCleared += numLines;
 	if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
 	int lineScore = 0;
 	//replace this with math to calculate score instead of hardcoded numbers
 	if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
+	lockDelay = 0;
+	lockCheck = false;
+	newPiece = true;
+	activePiece->clearTetromino();
 }
 
 //----------------------------------------------------------------------------------------//
@@ -119,15 +125,13 @@ int main ()
 		//update frame counts
 		frameCtr++;
 		inputBuffer++;
+		if(lockCheck) lockDelay++;
 
 		// drawing
 		BeginDrawing();
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(WHITE);
-
-		// draw some text using the default font
-		DrawText("Tetris", wWidth/2 - MeasureText("Tetris", 50)/2,0,50,GRAY);
+		ClearBackground(LIGHTGRAY);
 
 		// draw game board using rectangle struct
 		DrawRectangleLinesEx(gameBoard, lWeight, GRAY);
@@ -150,6 +154,14 @@ int main ()
 		std::string lvlString = "lvl: " + std::to_string(lvl);
 		char lToC[1024];
 		strcpy(lToC, lvlString.c_str());
+
+		std::string pieceStatus = "lX: " + std::to_string(activePiece->lXpos) + " rX: " 
+				+ std::to_string(activePiece->rXpos) + " tY:  " + std::to_string(activePiece->tYpos) + " bY: " +
+				std::to_string(activePiece->bYpos);
+		char psToC[1024];
+		strcpy(psToC, pieceStatus.c_str());
+
+		DrawText(psToC, 50, 50, 20, GRAY);
 		
 
 		//draw scoreboard and next pieces
@@ -163,67 +175,70 @@ int main ()
 			//pauses game if condition is true
 			if(!pause) {
 				//add new piece to matrix when previous piece has finished falling
-				if(pieces.size() == 0 || !(pieces.back()->falling)) {
+				if(newPiece) {
 					randValue = GetRandomValue(1, 7);
-					if(pieces.size() > 0) {
-						if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
-							gameOver = true;
-						}
-						else {
-							pieces.erase(pieces.begin());
-						}
+					if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
+						gameOver = true;
 					}
-					pieces.push_back(new Tetromino(randValue));
-					pieces.back()->falling = true;
-					gameGrid.addTetromino(pieces.back());
-					gameGrid.addGhost(pieces.back(), ghostPiece);
+					activePiece->id = randValue;
+					activePiece->buildTetromino();
+					activePiece->falling = true;
+					gameGrid.addTetromino(activePiece);
+					//gameGrid.addGhost(activePiece, ghostPiece);
+					newPiece = false;
 				}
 				//controls the movement of the active piece. Keyboard input is read to move pieces.
 				else {
 					if(IsKeyDown(KEY_RIGHT)) {
 						if(((inputBuffer/6)%2) == 1) {
-							gameGrid.movePiece(pieces.back(), 'r');
-							gameGrid.removeTetromino(ghostPiece);
-							gameGrid.addGhost(pieces.back(), ghostPiece);
+							gameGrid.movePiece(activePiece, 'r');
+							//gameGrid.removeTetromino(ghostPiece);
+							//gameGrid.addGhost(activePiece, ghostPiece);
 							inputBuffer = 0;
 						}
 					}
 					if(IsKeyDown(KEY_LEFT)) {
 						if(((inputBuffer/6)%2) == 1) {
-							gameGrid.movePiece(pieces.back(), 'l');
-							gameGrid.removeTetromino(ghostPiece);
-							gameGrid.addGhost(pieces.back(), ghostPiece);
+							gameGrid.movePiece(activePiece, 'l');
+							//gameGrid.removeTetromino(ghostPiece);
+							//gameGrid.addGhost(activePiece, ghostPiece);
 							inputBuffer = 0;
 						}
 					}
 					//moves active piece down and increase score each grid spot
 					if(IsKeyDown(KEY_DOWN)) {
 						if(((inputBuffer/6)%2) == 1) {
-							gameGrid.movePiece(pieces.back(), 'd');
-							if(!gameGrid.finishedFalling(pieces.back())) { 
+							//gameGrid.removeTetromino(ghostPiece);
+							gameGrid.movePiece(activePiece, 'd');
+							//gameGrid.addGhost(activePiece, ghostPiece);
+							if(!gameGrid.finishedFalling(activePiece)) { 
 								score++;
 							}
 							else {
-								lockPiece();
+								if(!lockCheck) lockCheck = true;
+								if((lockDelay/60) % 2 == 1) lockPiece();
 							}
 							inputBuffer = 0;
 						}
 					}
 					if(IsKeyPressed(KEY_UP)) {
-						gameGrid.rotateTetromino(pieces.back());
-						gameGrid.ghostRotate(pieces.back(), ghostPiece);
+						gameGrid.rotateTetromino(activePiece);
+						//gameGrid.ghostRotate(activePiece, ghostPiece);
 					}
 					if(IsKeyPressed(KEY_SPACE)) {
-						gameGrid.removeTetromino(ghostPiece);
-						score += gameGrid.hardDrop(pieces.back());
+						//gameGrid.removeTetromino(ghostPiece);
+						score += gameGrid.hardDrop(activePiece);
 						lockPiece();
 					}
 					
 					//Active piece automatically moves down when a certain amount of time has passed
 					if ((frameCtr / (60 - (59*(lvl-1)/24)) ) % 2 == 1) {
-						gameGrid.movePiece(pieces.back(), 'd');
-						if(gameGrid.finishedFalling(pieces.back())) {
-							lockPiece();
+						//gameGrid.removeTetromino(ghostPiece);
+						gameGrid.movePiece(activePiece, 'd');
+						//gameGrid.addGhost(activePiece, ghostPiece);
+						if(gameGrid.finishedFalling(activePiece)) {
+							if(!lockCheck) lockCheck = true;
+							if((lockDelay/60) % 2 == 1) lockPiece();
 						}
 						frameCtr = 0;
 					}

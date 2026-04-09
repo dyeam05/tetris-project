@@ -69,16 +69,21 @@ class Grid {
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
     void movePiece(Tetromino* piece, char direction) {
+        int pieceX = 0;
+        int pieceY = 3;
         switch (direction) {
             case 'l':
                 if(!leftColCheck(piece)){
-                    for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-                        for(int j = piece->lXpos-1; j <= piece->rXpos; j++) {
-                            if(grid[i][j] != '0') {
+                    for(int i = piece->bYpos; i >= piece->tYpos; i--) {
+                        for(int j = piece->lXpos; j <= piece->rXpos; j++) {
+                            if(grid[i][j] != '0' && piece->squares[pieceY][pieceX] != '0') {
                                 grid[i][j-1] = piece->color;
                                 grid[i][j] = '0';
                             }
+                            pieceX++;
                         }
+                        pieceY--;
+                        pieceX = 0;
                     }
                     piece->lXpos--;
                     piece->rXpos--;
@@ -86,14 +91,18 @@ class Grid {
                 break;
 
             case 'r':
+                pieceX = piece->rXpos - piece->lXpos;
                 if(!rightColCheck(piece)) {
-                    for(int i = piece->tYpos; i <= piece->bYpos; i++) {
+                    for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->rXpos; j >= piece->lXpos; j--) {
-                            if(grid[i][j] != '0') {
+                            if(grid[i][j] != '0' && piece->squares[pieceY][pieceX] != '0') {
                                 grid[i][j+1] = piece->color;
                                 grid[i][j] = '0';
                             }
+                            pieceX--;
                         }
+                        pieceY--;
+                        pieceX = piece->rXpos - piece->lXpos;
                     }
                     piece->lXpos++;
                     piece->rXpos++;
@@ -102,8 +111,6 @@ class Grid {
 
             case 'd':
                 if(!bottomColCheck(piece)) {
-                    int pieceX = 0;
-                    int pieceY = 3;
                     for(int i = piece->bYpos; i >= piece->tYpos; i--) {
                         for(int j = piece->lXpos; j <= piece->rXpos; j++) {
                             if(grid[i][j] != '0' && piece->squares[pieceY][pieceX] != '0') {
@@ -125,8 +132,17 @@ class Grid {
 
     void addGhost(Tetromino* piece, Tetromino* ghostPiece) {
         ghostPiece->initGhost(piece);
-        addTetromino(ghostPiece);
-        hardDrop(ghostPiece);
+        bool ghostCol = false;
+        for(int i = ghostPiece->tYpos; i <= ghostPiece->bYpos; i++) {
+            for(int j = ghostPiece->lXpos; j <= ghostPiece->rXpos; j++) {
+                if(grid[i][j] != '0')  ghostCol = true;
+            }
+        }
+        if(piece->bYpos >= ghostPiece->tYpos) ghostCol = true;
+        if(!ghostCol) {
+            addTetromino(ghostPiece);
+            hardDrop(ghostPiece);
+        }
     }
 
     void printGrid() {
@@ -160,7 +176,7 @@ class Grid {
             for(int j = piece->bYpos; j >= piece->tYpos; j--) {
                 if(piece->squares[k][l] != '0' && (k==3 || piece->squares[k+1][l] == '0')) {
                     //std::cout << "Piece grid spot [" << k << "] [" << l << "] contains a filled square" << std::endl;
-                    if(grid[j][i] != '0' && grid[j+1][i] != '0') {
+                    if(grid[j][i] != '0' && grid[j+1][i] != '0' && grid[j+1][i] != 'G') {
                         //std::cout << "Grid space [" << j+1 << "] [" << i << "] also contains a filled square";
                         check = true;
                         break;

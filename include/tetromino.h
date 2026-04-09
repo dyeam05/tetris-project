@@ -40,31 +40,6 @@ class Tetromino {
 
     Tetromino(int id) {
         this->id = id;
-        switch (id) {
-            case 1:
-                color = 't';
-                break;
-            case 2:
-                color = 'b';
-                break;
-            case 3:
-                color = 'o';
-                break;
-            case 4: 
-                color = 'y';
-                break;
-            case 5:
-                color = 'r';
-                break;
-            case 6:
-                color = 'g';
-                break;
-            case 7:
-                color = 'p';
-                break;
-            default:
-                color = '0';
-        }
         falling = true;
 
         for(int i = 0; i < 4; i++){
@@ -94,6 +69,7 @@ class Tetromino {
         rXpos = 0;
         tYpos = 0;
         bYpos = 0;
+        orientation = 0;
         falling = false;
 
         for(int i = 0; i < 4; i++){
@@ -106,6 +82,7 @@ class Tetromino {
     void buildTetromino() {
         switch (id) {
             case 1: //straight line piece
+                color = 't';
                 squares[3][0] = color;
                 squares[3][1] = color;
                 squares[3][2] = color;
@@ -117,6 +94,7 @@ class Tetromino {
                 break;
             
             case 2: //reverse l piece
+                color = 'b';
                 squares[2][0] = color;
                 squares[3][0] = color;
                 squares[3][1] = color;
@@ -128,6 +106,7 @@ class Tetromino {
                 break;
             
             case 3: //l piece
+                color = 'o';
                 squares[2][2] = color;
                 squares[3][0] = color;
                 squares[3][1] = color;
@@ -139,6 +118,7 @@ class Tetromino {
                 break;
             
             case 4: //square piece
+                color = 'y';
                 squares[2][0] = color;
                 squares[2][1] = color;
                 squares[3][0] = color;
@@ -150,6 +130,7 @@ class Tetromino {
                 break;
 
             case 5: //z piece
+                color = 'r';
                 squares[2][0] = color;
                 squares[2][1] = color;
                 squares[3][1] = color;
@@ -161,6 +142,7 @@ class Tetromino {
                 break;
 
             case 6: //reverse z piece
+                color = 'g';
                 squares[2][1] = color;
                 squares[2][2] = color;
                 squares[3][0] = color;
@@ -172,6 +154,7 @@ class Tetromino {
                 break;
 
             case 7: //t piece
+                color = 'p';
                 squares[2][1] = color;
                 squares[3][0] = color;
                 squares[3][1] = color;
@@ -188,7 +171,7 @@ class Tetromino {
     void buildGhost(Tetromino* piece) {
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
-                squares[i][j] = piece->squares[i][j];
+                if(piece->squares[i][j] != '0') squares[i][j] = color;
             }
         }
     }
@@ -210,17 +193,15 @@ class Tetromino {
         if(orientation == 4) orientation = 0;
         switch (id) {
             case 1: //straight line piece
-                if(orientation == 0){
-                    squares[2][0] = color;
-                    squares[2][1] = color;
-                    squares[2][2] = color;
-                    squares[2][3] = color;
-                    lXpos -= 1;
-                    rXpos += 2;
-                    tYpos += 2;
-                    bYpos -= 1;
+                if(orientation == 0 || orientation == 2){
+                    squares[3][0] = color;
+                    squares[3][1] = color;
+                    squares[3][2] = color;
+                    squares[3][3] = color;
+                    rXpos += 3;
+                    tYpos += 3;
                 }
-                else if(orientation == 1) {
+                else if(orientation == 1 || orientation == 3) {
                     squares[0][0] = color;
                     squares[1][0] = color;
                     squares[2][0] = color;
@@ -228,25 +209,6 @@ class Tetromino {
                     rXpos -= 3;
                     tYpos -= 3;
                 }
-                else if(orientation == 2) {
-                    squares[3][0] = color;
-                    squares[3][1] = color;
-                    squares[3][2] = color;
-                    squares[3][3] = color;
-                    rXpos += 3;
-                    tYpos += 1;
-                    bYpos -= 2;
-                }
-                else {
-                    squares[0][0] = color;
-                    squares[1][0] = color;
-                    squares[2][0] = color;
-                    squares[3][0] = color;
-                    lXpos += 1;
-                    rXpos -= 2;
-                    tYpos -= 1;
-                    bYpos += 2;
-                }   
                 break;
             
             case 2: //reverse l piece
@@ -427,9 +389,6 @@ class Tetromino {
     int orientation = 0; //stores the orientation of the piece.
     char color; //color value represented by single character: 't' = teal, 'b' = blue, 'o' = orange, 'y' = yellow, 'g' = green, 'p' = purple, 'r' = red
     bool falling; //determines if the tetromino is still in play, or that it is still falling down the game board.
-    void changeX(int x);
-    void changeY(int y);
-    void changePos(int newx, int newy);
 };
 
 #endif

@@ -1,4 +1,2 @@
 Bugs:
-- Pieces can potentially phase through boundary walls and appear on next row
-- Extra squares filled when rotating L and reverse L pieces
-- Score continues to increase while soft-dropping a piece as it locks into place.
+-new piece doesn't initially appear on game restart until rotate.
