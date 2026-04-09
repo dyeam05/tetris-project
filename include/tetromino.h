@@ -55,11 +55,26 @@ class Tetromino {
         clearTetromino();
         lXpos = piece->lXpos;
         rXpos = piece->rXpos;
+        //tYpos = piece->tYpos;
+        //bYpos = piece->bYpos;
         tYpos = piece->bYpos + 1;
         bYpos = tYpos + (piece->bYpos - piece->tYpos);
         id = piece->id;
         color = 'G';
         buildGhost(piece);
+    }
+
+    void copyPiece(Tetromino* piece) {
+        clearTetromino();
+        lXpos = piece->lXpos;
+        rXpos = piece->rXpos;
+        tYpos = piece->tYpos;
+        bYpos = piece->bYpos;
+        orientation = piece->orientation;
+        id = piece->id;
+        color = piece->color;
+        falling = piece->falling;
+        buildTetromino();
     }
 
     void clearTetromino() {
@@ -277,7 +292,7 @@ class Tetromino {
                     squares[2][1] = color;
                     squares[3][1] = color;
 
-                    lXpos += 1;
+                    rXpos -= 1;
                     tYpos -= 1;
                 }
 

@@ -50,14 +50,15 @@ class Grid {
         }
 
     }
+    //potentially tweak logic to move pieces after rotate to avoid overlap
     void rotateTetromino(Tetromino* piece) {
         removeTetromino(piece);
-        while(topColCheck(piece)) movePiece(piece, 'd');
-        if(leftColCheck(piece)) movePiece(piece, 'r');
-        if(rightColCheck(piece)) movePiece(piece, 'l');
+        //if(leftColCheck(piece)) movePiece(piece, 'r');
+        //if(rightColCheck(piece)) movePiece(piece, 'l');
         piece->rotate();
         addTetromino(piece);
-
+        while(piece->tYpos < 0) movePiece(piece, 'd');
+        while(piece->rXpos > 9) movePiece(piece, 'l');
             //printGrid();
     }
 
@@ -132,17 +133,8 @@ class Grid {
 
     void addGhost(Tetromino* piece, Tetromino* ghostPiece) {
         ghostPiece->initGhost(piece);
-        bool ghostCol = false;
-        for(int i = ghostPiece->tYpos; i <= ghostPiece->bYpos; i++) {
-            for(int j = ghostPiece->lXpos; j <= ghostPiece->rXpos; j++) {
-                if(grid[i][j] != '0')  ghostCol = true;
-            }
-        }
-        if(piece->bYpos >= ghostPiece->tYpos) ghostCol = true;
-        if(!ghostCol) {
-            addTetromino(ghostPiece);
-            hardDrop(ghostPiece);
-        }
+        //addTetromino(ghostPiece);
+        //hardDrop(ghostPiece);
     }
 
     void printGrid() {

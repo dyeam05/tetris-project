@@ -1,2 +1,2 @@
 Bugs:
--new piece doesn't initially appear on game restart until rotate.
+- some pieces delete blocks from other pieces upon rotate

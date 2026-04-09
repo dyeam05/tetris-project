@@ -1,8 +1,6 @@
 TODO:
 - continue testing collision detection logic
 - continue tweaking piece rotate function
-- add wait time for pieces to be locked
-- use game piece vector as stack. pop pieces from stack when they are stuck in place.
 - add next queue for pieces to be generated before being in play
 - add hold state for pieces
 - add function for t-spin and mini-t-spin scoring logic
