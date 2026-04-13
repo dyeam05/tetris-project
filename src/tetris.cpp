@@ -51,6 +51,7 @@ Tetromino* activePiece = new Tetromino;
 Tetromino* ghostPiece = new Tetromino;
 Tetromino* nextPiece = new Tetromino;
 Tetromino* holdPiece = new Tetromino;
+Tetromino* bufferPiece = new Tetromino;
 int randValue = GetRandomValue(1, 7);
 int frameCtr = 0;
 int inputBuffer = 0;
@@ -59,6 +60,7 @@ bool gameOver = false;
 bool pause = false;
 bool lockCheck = false;
 bool newPiece = true;
+bool canHold = true;
 //--------------------------------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------//
@@ -92,6 +94,8 @@ void restartGame() {
 	lvl = 1;
 	lCleared = 0;
 	activePiece->clearTetromino();
+	nextPiece->clearTetromino();
+	holdPiece->clearTetromino();
 	newPiece = true;
 }
 
@@ -200,6 +204,7 @@ int main ()
 						randValue = GetRandomValue(1, 7);
 						nextPiece->id = randValue;
 						nextPiece->buildTetromino();
+						canHold = true;
 					}
 
 
@@ -255,7 +260,31 @@ int main ()
 						lockPiece();
 					}
 					if(IsKeyPressed(KEY_C)) {
-						
+						if(holdPiece->color == 'G') {
+							holdPiece->copyPiece(activePiece);
+							gameGrid.removeTetromino(activePiece);
+							activePiece->clearTetromino();
+							activePiece->copyPiece(nextPiece);
+							nextPiece->clearTetromino();
+							randValue = GetRandomValue(1, 7);
+							nextPiece->id = randValue;
+							nextPiece->buildTetromino();
+							gameGrid.addTetromino(activePiece);
+							canHold = false;
+						}
+						else {
+							if(canHold) {
+								gameGrid.removeTetromino(activePiece);
+								bufferPiece->copyPiece(activePiece);
+								activePiece->clearTetromino();
+								activePiece->copyPiece(holdPiece);
+								holdPiece->clearTetromino();
+								holdPiece->copyPiece(bufferPiece);
+								bufferPiece->clearTetromino();
+								gameGrid.addTetromino(activePiece);
+								canHold = false;
+							}
+						}
 					}
 					
 					//Active piece automatically moves down when a certain amount of time has passed
@@ -292,6 +321,19 @@ int main ()
 										sSize, 
 										sSize, 
 										charToColor(nextPiece->squares[i][j]));
+					}
+				}
+			}
+
+			// draw hold piece
+			for(int i = 0; i < 4; i++) {
+				for(int j = 0; j < 4; j++) {
+					if(holdPiece->squares[i][j] != '0') {
+						DrawRectangle(	(bStartX - nWidth - 50)+sSize*j+(nWidth/4), 
+										500+sSize*i, 
+										sSize, 
+										sSize, 
+										charToColor(holdPiece->squares[i][j]));
 					}
 				}
 			}
