@@ -56,6 +56,8 @@ int randValue = GetRandomValue(1, 7);
 int frameCtr = 0;
 int inputBuffer = 0;
 int lockDelay = 0;
+int comboCtr = 0;
+bool b2bTetris = false;
 bool gameOver = false;
 bool pause = false;
 bool lockCheck = false;
@@ -65,6 +67,8 @@ bool canHold = true;
 
 //----------------------------------------------------------------------------------------//
 //Game Functions
+
+//converts color char in game piece/grid to raylib recognized color
 Color charToColor(char c) {
 		switch(c) {
 		case 't':
@@ -87,6 +91,7 @@ Color charToColor(char c) {
 	return BLACK;
 }
 
+//resets all pieces and variables to default state
 void restartGame() {
 	gameOver = false;
 	gameGrid.clearGrid();
@@ -99,14 +104,29 @@ void restartGame() {
 	newPiece = true;
 }
 
+//locks active piece in place, then adds calculated points to total score. Finally, signals game to generate and add a new piece.
 void lockPiece() {
 	activePiece->falling = false;
 	int numLines = gameGrid.multiClear(activePiece);
 	lCleared += numLines;
 	if((((lCleared - (lCleared % 10)) / 10)) > lvl-1) lvl++;
-	int lineScore = 0;
-	//replace this with math to calculate score instead of hardcoded numbers
-	if(numLines != 0) score += (numLines*100 + (numLines-1)*100) * lvl;
+
+	if(numLines != 0) {
+		score += (numLines*100 + (numLines-1)*100) * lvl;
+		score += 50 * comboCtr * lvl;
+		comboCtr++;
+		if(numLines == 4) {
+			//work on changing this to a 1.5x mult instead
+			if(b2bTetris) score += ((numLines*100 + (numLines-1)*100) * lvl) * 2;
+			b2bTetris = true;
+		}
+		else {
+			b2bTetris = false;
+		}
+	}
+	else {
+		comboCtr = 0;
+	}
 	lockDelay = 0;
 	lockCheck = false;
 	newPiece = true;
@@ -172,6 +192,11 @@ int main ()
 
 		DrawText(psToC, 50, 50, 20, GRAY);
 		
+		std::string comboStatus = "Combo Counter: " + std::to_string(comboCtr) + " b2b Tetris: " + std::to_string(b2bTetris);
+		char csToC[1024];
+		strcpy(csToC, comboStatus.c_str());
+		DrawText(csToC, 50, 70, 20, GRAY);
+
 
 		//draw scoreboard and next pieces
 		DrawText(lcStoC, bStartX - nWidth - 50, 100, fontSize, GRAY);
