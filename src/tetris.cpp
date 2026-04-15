@@ -202,9 +202,10 @@ int main ()
 		DrawText(lcStoC, bStartX - nWidth - 50, 100, fontSize, GRAY);
 		DrawText(scoreSToC, bStartX - nWidth - 50,150,fontSize, GRAY);
 		DrawText(lToC, bStartX - nWidth - 50,200,fontSize, GRAY);
-		DrawText("Next:", bStartX - nWidth - 50, 250, fontSize, GRAY);
+		DrawText("Next:", bStartX - nWidth - 50, 275, fontSize, GRAY);
 		DrawRectangleLinesEx(nextWindow, 10, GRAY);
 		DrawRectangleLinesEx(holdWindow, 10, GRAY);
+		DrawText("Hold:", bStartX - nWidth - 50, 475, fontSize, GRAY);
 
 
 		//if game over condition is false, continue to add pieces

@@ -2,5 +2,4 @@ TODO:
 - continue testing collision detection logic
 - continue tweaking piece rotate function
 - add function for t-spin and mini-t-spin scoring logic
-- add logic and variables for combo scoring
 - fix ghost piece overlay
