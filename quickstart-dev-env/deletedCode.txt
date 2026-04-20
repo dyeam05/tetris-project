@@ -1,0 +1,59 @@
+First Try:	
+	
+	int ghostTop = 0;
+	int ghostBottom = 19;
+	int currentBottom;
+	
+	for(int i = pieces.back()->lXpos; i <= pieces.back()->rXpos; i++) {
+		currentBottom = pieces.back()->bYpos;
+		while(gameGrid.grid[currentBottom][i] == '0') {
+			currentBottom--;
+		}
+		do {
+			currentBottom++;
+		} while(gameGrid.grid[currentBottom+1][i] == '0' && currentBottom < 19);
+		if(currentBottom != ghostBottom) ghostBottom = currentBottom;
+	}
+	ghostTop = ghostBottom - (pieces.back()->bYpos - pieces.back()->tYpos);
+
+	int pieceX = 0;
+	int pieceY = 3 - (ghostBottom - ghostTop);
+	for(int i = ghostTop; i <= ghostBottom; i++) {
+		for(int j = pieces.back()->lXpos; j <= pieces.back()->rXpos; j++) {
+			if(pieces.back()->squares[pieceY][pieceX] != '0') {
+				DrawRectangle(bStartX+sSize*j, bStartY+sSize*i, sSize, sSize, GRAY);
+			}
+			pieceX++;
+		}
+		pieceY++;
+		pieceX = 0;
+	}
+
+	//-----FOR DEBUGGING-----//
+	std::string ghostPos = "Bottom of Ghost Piece: " + std::to_string(ghostBottom);
+	char gpToC[1024];
+	strcpy(gpToC, ghostPos.c_str());
+	DrawText(gpToC, 800, 600, 15, GRAY);
+
+
+
+Second Try:
+
+	int squareX;
+	int squareY;
+
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			if(pieces.back()->squares[j][i] != '0') {
+				squareY = pieces.back()->tYpos + (j - pieceY);
+				squareX = pieces.back()->lXpos + i;
+				while(gameGrid.grid[squareY + 1][squareX] == '0' || squareY < pieces.back()->bYpos) {
+					squareY++;
+				}
+				for(int k = j; k < 3; k++) {
+					squareY--;
+				}
+				DrawRectangle(bStartX+sSize*squareX, bStartY+sSize*squareY, sSize, sSize, GRAY);
+			} 
+		}
+	}

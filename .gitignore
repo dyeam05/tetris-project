@@ -1,7 +1,11 @@
 bin/
-build/
+**/build/
 resources/
 build-MinGW-W64.bat
 build-VisualStudio2022.bat
 Makefile
 obj/
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+cmake_install.cmake

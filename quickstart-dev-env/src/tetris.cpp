@@ -13,7 +13,7 @@
 
 //------------------------------------------------------------------------------------------//
 #include "raylib.h"
-//#include "resource_dir.h"	// utility header for SearchAndSetResourceDir
+#include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 #include "tetromino.h"		// header that defines function of tetromino pieces
 #include "grid.h"			// header that defines function of grid
 
@@ -147,7 +147,7 @@ int main ()
 	SetTargetFPS(60);
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-	//SearchAndSetResourceDir("resources");
+	SearchAndSetResourceDir("resources");
 	
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
