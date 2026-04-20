@@ -9,3 +9,4 @@ CMakeCache.txt
 CPackConfig.cmake
 CPackSourceConfig.cmake
 cmake_install.cmake
+.DS_Store

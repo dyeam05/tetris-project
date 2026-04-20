@@ -1,4 +1,0 @@
-Bugs:
-- some pieces delete blocks from other pieces upon rotate
-- game crashes when rotating line piece when grid is full
-- some pieces break when rotating after hold piece swap
