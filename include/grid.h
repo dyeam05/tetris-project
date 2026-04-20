@@ -62,12 +62,6 @@ class Grid {
             //printGrid();
     }
 
-    void ghostRotate(Tetromino* piece, Tetromino* ghostPiece) {
-        removeTetromino(ghostPiece);
-        ghostPiece->rotate();
-        addGhost(piece, ghostPiece);
-    }
-
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
     void movePiece(Tetromino* piece, char direction) {
         int pieceX = 0;
@@ -133,8 +127,7 @@ class Grid {
 
     void addGhost(Tetromino* piece, Tetromino* ghostPiece) {
         ghostPiece->initGhost(piece);
-        //addTetromino(ghostPiece);
-        //hardDrop(ghostPiece);
+        hardDrop(ghostPiece);
     }
 
     void printGrid() {
