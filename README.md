@@ -34,3 +34,9 @@ This project uses controls similar to other, web-based tetris versions:
 - C: Hold Piece
 - P: Pause Game
 - R: Restart Game (on Game Over)
+
+## Bugs:
+
+This project is still a WIP, so there are plenty of bugs to be fixed.
+Some features and mechanics haven't yet been fully implemented, so there are some partially completed functions that might cause game errors
+For now, all bugs that I discover can be found in txtfiles/BUGS.txt
