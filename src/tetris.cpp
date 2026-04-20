@@ -335,6 +335,7 @@ int main ()
 				}
 			}
 
+			/*
 			// draw ghost piece
 			int k = 3 - (ghostPiece->bYpos - ghostPiece->tYpos);
 			int l = 0;
@@ -350,7 +351,7 @@ int main ()
 			}
 
 			//test draw ghost
-			/*
+
 			for(int i = 0; i < 4; i++) {
 				for(int j = 0; j < 4; j++) {
 					if(ghostPiece->squares[i][j] != '0') {
