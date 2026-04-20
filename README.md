@@ -6,9 +6,21 @@ This project aims to implement the modern forms of tetris in a (n eventually) li
 
 
 ## To Install:
+- Clone this repo using `git clone https://github.com/dyeam05/tetris-project-tests` in terminal
+- Download [CMake](https://cmake.org/download/)
+- Input the following lines in your terminal to build the game:
 
-My development environment for this project is currently somewhat sketchy, so installing the project through this repo is not yet working. However, I have created a [test repo](https://github.com/dyeam05/tetris-project-tests) that uses **CMake** to build the project and dependencies.
+```bash
+cmake -B build
+cmake --build build
+```
 
+- This should build the game in a newly created build directory
+- Once this has been sucessfully completed, run the built game with either `./build/Debug/tetris.exe` on windows, or `./build/tetris` on Linux or macOS
+
+
+### Important Note:
+I have been using the [raylib-quickstart](https://github.com/raylib-extras/raylib-quickstart) template to develop this project, so to make installation easier, I have moved all of those files to the quickstart-dev-env folder. This folder can be ignored.
 
 ## To Play:
 
