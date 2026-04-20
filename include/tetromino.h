@@ -38,8 +38,8 @@ class Tetromino {
         }
     }
 
-    Tetromino(int id) {
-        this->id = id;
+    Tetromino(int type) {
+        this->id = type;
         falling = true;
 
         for(int i = 0; i < 4; i++){
