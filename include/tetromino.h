@@ -19,16 +19,14 @@
 
 #include <iostream>
 
+
+
 class Tetromino { 
     public:
     // Default Constructor. sets all int values to 0, color value to empty char and falling to false.
     Tetromino() { 
         id = 0;
         color = 'G';
-        lXpos = 0;
-        rXpos = 0;
-        tYpos = 0;
-        bYpos = 0;
         falling = false;
 
         for(int i = 0; i < 4; i++){
@@ -95,89 +93,68 @@ class Tetromino {
     }
     
     void buildTetromino() {
+        // Map piece matrix to starting point on game grid
+        lXpos = 3;
+        rXpos = 6;
+        tYpos = 0;
+        bYpos = 3;
+
         switch (id) {
             case 1: //straight line piece
                 color = 't';
-                squares[3][0] = color;
-                squares[3][1] = color;
-                squares[3][2] = color;
-                squares[3][3] = color;
-                lXpos = 3;
-                rXpos = 6;
-                tYpos = 0;
-                bYpos = 0;
+                squares[2][0] = color;
+                squares[2][1] = color;
+                squares[2][2] = color;
+                squares[2][3] = color;
                 break;
             
             case 2: //reverse l piece
                 color = 'b';
+                squares[1][0] = color;
                 squares[2][0] = color;
-                squares[3][0] = color;
-                squares[3][1] = color;
-                squares[3][2] = color;
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                squares[2][1] = color;
+                squares[2][2] = color;
                 break;
             
             case 3: //l piece
                 color = 'o';
+                squares[2][0] = color;
+                squares[2][1] = color;
                 squares[2][2] = color;
-                squares[3][0] = color;
-                squares[3][1] = color;
-                squares[3][2] = color;
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                squares[1][2] = color;
                 break;
             
             case 4: //square piece
                 color = 'y';
-                squares[2][0] = color;
+                squares[1][1] = color;
+                squares[1][2] = color;
                 squares[2][1] = color;
-                squares[3][0] = color;
-                squares[3][1] = color;
-                lXpos = 4;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                squares[2][2] = color;
                 break;
 
             case 5: //z piece
                 color = 'r';
-                squares[2][0] = color;
+                squares[1][0] = color;
+                squares[1][1] = color;
                 squares[2][1] = color;
-                squares[3][1] = color;
-                squares[3][2] = color;
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                squares[2][2] = color;
                 break;
 
             case 6: //reverse z piece
                 color = 'g';
+                squares[1][1] = color;
+                squares[1][2] = color;
+                squares[2][0] = color;
                 squares[2][1] = color;
-                squares[2][2] = color;
-                squares[3][0] = color;
-                squares[3][1] = color;
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
                 break;
 
             case 7: //t piece
                 color = 'p';
+                squares[1][1] = color;
+                squares[2][0] = color;
                 squares[2][1] = color;
-                squares[3][0] = color;
-                squares[3][1] = color;
-                squares[3][2] = color;
-                lXpos = 3;
-                rXpos = 5;
-                tYpos = 0;
-                bYpos = 1;
+                squares[2][2] = color;
+
             default:
                 break;
         }
@@ -191,14 +168,39 @@ class Tetromino {
         }
     }
 
-
-    
-
     void clear() {
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
                 squares[i][j] = '0';
             } 
+        }
+    }
+
+    void new_rotate_test() {
+        // create blank temp matrix
+        char temp[4][4];
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                temp[i][j] = '0';
+             }
+        }
+
+        // transpose original piece on temp matrix with 90 degree clockwise rotation
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                if(squares[i][j] != '0') {
+                    // y1 = y0, x1 = 3-y0 (swap & invert)
+                    // This transformation rotates pieces 90 degrees
+                    temp[j][3-i] = color;
+                }
+            }
+        }
+
+        // copy temp matrix to original grid of squares
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                squares[i][j] = temp[i][j];
+            }
         }
     }
 

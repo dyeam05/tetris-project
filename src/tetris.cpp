@@ -234,14 +234,15 @@ int main ()
 						canHold = true;
 					}
 
-
-					if (gameGrid.grid[0][4] != '0' || gameGrid.grid[0][5] != '0') {
+					if (gameGrid.bottomColCheck(activePiece) || gameGrid.topColCheck(activePiece)) {
 						gameOver = true;
 					}
+					else {
+						gameGrid.addTetromino(activePiece);
+					}
 
-					gameGrid.addTetromino(activePiece);
 					if(!gameGrid.bottomColCheck(activePiece)) {
-						gameGrid.addGhost(activePiece, ghostPiece);
+						//gameGrid.addGhost(activePiece, ghostPiece);
 					}
 					newPiece = false;
 				}
@@ -250,14 +251,14 @@ int main ()
 					if(IsKeyDown(KEY_RIGHT)) {
 						if(((inputBuffer/6)%2) == 1) {
 							gameGrid.movePiece(activePiece, 'r');
-							gameGrid.addGhost(activePiece, ghostPiece);
+							//gameGrid.addGhost(activePiece, ghostPiece);
 							inputBuffer = 0;
 						}
 					}
 					if(IsKeyDown(KEY_LEFT)) {
 						if(((inputBuffer/6)%2) == 1) {
 							gameGrid.movePiece(activePiece, 'l');
-							gameGrid.addGhost(activePiece, ghostPiece);
+							//gameGrid.addGhost(activePiece, ghostPiece);
 							inputBuffer = 0;
 						}
 					}
@@ -277,7 +278,7 @@ int main ()
 					}
 					if(IsKeyPressed(KEY_UP)) {
 						gameGrid.rotateTetromino(activePiece);
-						gameGrid.addGhost(activePiece, ghostPiece);
+						//gameGrid.addGhost(activePiece, ghostPiece);
 					}
 					if(IsKeyPressed(KEY_SPACE)) {
 						//gameGrid.removeTetromino(ghostPiece);

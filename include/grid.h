@@ -22,21 +22,14 @@ class Grid {
     Tetromino* pieces;
 
     void addTetromino(Tetromino* piece) {
-        //std::cout << "piece orientation: " << piece->orientation << std::endl; 
-        //std::cout << "piece grid coords: TopY = " << piece->tYpos << ", BottomY = " << piece->bYpos << ", LeftX = " << piece->lXpos << ", RightX = " << piece->rXpos << std::endl;
-        //Builds piece from Top-Left to Bottom-Right
-        int pieceX = 0;
-        int pieceY = 3 - (piece->bYpos - piece->tYpos);
-        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-            for(int j = piece->lXpos; j <= piece->rXpos; j++) {
-                grid[i][j] = piece->squares[pieceY][pieceX];
-                //std::cout << "piece grid coords: (" << pieceY << ", " << pieceX << ")" << std::endl; 
-                pieceX++;
-            }
-            pieceY++;
-            pieceX = 0;
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                if (piece->squares[i][j] != '0')
+                    grid[piece->tYpos+i][piece->lXpos+j] = piece->squares[i][j];
+            } 
         }
     }
+    
     void removeTetromino(Tetromino* piece) {
         int k = 3 - (piece->bYpos - piece->tYpos);
         int l = 0;
@@ -53,13 +46,10 @@ class Grid {
     //potentially tweak logic to move pieces after rotate to avoid overlap
     void rotateTetromino(Tetromino* piece) {
         removeTetromino(piece);
-        //if(leftColCheck(piece)) movePiece(piece, 'r');
-        //if(rightColCheck(piece)) movePiece(piece, 'l');
-        piece->rotate();
+        piece->new_rotate_test();
         addTetromino(piece);
         while(piece->tYpos < 0) movePiece(piece, 'd');
         while(piece->rXpos > 9) movePiece(piece, 'l');
-            //printGrid();
     }
 
     //Moves pieces around the grid. direction char is passed as arg to determine direction of movement for piece specified in first arg. 
@@ -141,49 +131,48 @@ class Grid {
 
     //takes condition from movePiece down function and returns a boolean if the piece can no longer be moved down
     bool finishedFalling(Tetromino* piece) {
-        if(piece->bYpos == 19) {
-            return true;
-        }
         if (bottomColCheck(piece)) {
                 return true;
         }
-            return false;
+        return false;
     }
     
     //checks if space underneath current piece is occupied by previous piece
     bool bottomColCheck(Tetromino* piece) {
         bool check = false;
-        if(piece->bYpos == 19) return true;
-        int k = 3;
-        int l = 0;
-        for(int i = piece->lXpos; i <= piece->rXpos; i++) {
-            k = 3;
-            for(int j = piece->bYpos; j >= piece->tYpos; j--) {
-                if(piece->squares[k][l] != '0' && (k==3 || piece->squares[k+1][l] == '0')) {
-                    //std::cout << "Piece grid spot [" << k << "] [" << l << "] contains a filled square" << std::endl;
-                    if(grid[j][i] != '0' && grid[j+1][i] != '0' && grid[j+1][i] != 'G') {
-                        //std::cout << "Grid space [" << j+1 << "] [" << i << "] also contains a filled square";
+        // Iterate over 4x4 piece matrix
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                // This condition maps a square on the piece grid to a square on the game grid.
+                if(piece->squares[i][j] == grid[piece->tYpos+i][piece->lXpos+j] && piece->squares[i][j] != '0') {
+                    
+                    // If the bottom-most piece position is on the edge, count as collision
+                    if( piece->tYpos+i == 19 ||
+                        (grid[piece->tYpos+i+1][piece->lXpos+j] != '0' && (i == 3 || piece->squares[i+1][j] == '0'))) {
                         check = true;
                         break;
                     }
                 }
-                //else std::cout << "Piece grid spot [" << k << "] [" << l << "] does not contain a filled square" << std::endl;
-                k--;
             }
-            l++;
-            if(check) break;
         }
-
         return check;
     }
     //weird crash caused by this. idk what the problem is yet
     bool topColCheck(Tetromino* piece) {
         bool check = false;
-        if(piece->tYpos == 0) return true;
-        for(int i = piece->lXpos; i <= piece->rXpos; i++) {
-            if(grid[piece->tYpos-1][i] != '0' && grid[piece->tYpos][i] != '0') {
-                check = true;
-                break;
+        // Iterate over 4x4 piece matrix
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                // This condition maps a square on the piece grid to a square on the game grid.
+                if(piece->squares[i][j] == grid[piece->tYpos+i][piece->lXpos+j] && piece->squares[i][j] != '0') {
+                    
+                    // If the bottom-most piece position is on the edge, count as collision
+                    if( piece->tYpos+i == 0 ||
+                        (grid[piece->tYpos+i-1][piece->lXpos+j] != '0' && (i == 0 || piece->squares[i-1][j] == '0'))) {
+                        check = true;
+                        break;
+                    }
+                }
             }
         }
         return check;
@@ -191,11 +180,19 @@ class Grid {
 
     bool leftColCheck(Tetromino* piece) {
         bool check = false;
-        if(piece->lXpos == 0) return true;
-        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-            if(grid[i][piece->lXpos-1] != '0' && grid[i][piece->lXpos] != '0') {
-                check = true;
-                break;
+        // Iterate over 4x4 piece matrix
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                // This condition maps a square on the piece grid to a square on the game grid.
+                if(piece->squares[i][j] == grid[piece->tYpos+i][piece->lXpos+j] && piece->squares[i][j] != '0') {
+                    
+                    // If the left-most piece position is on the edge, count as collision
+                    if( piece->lXpos+j == 0 ||
+                        (grid[piece->tYpos+i][piece->lXpos+j-1] != '0' && (j == 0 || piece->squares[i][j-1] == '0'))) {
+                        check = true;
+                        break;
+                    }
+                }
             }
         }
         return check;
@@ -203,11 +200,19 @@ class Grid {
 
     bool rightColCheck(Tetromino* piece) {
         bool check = false;
-        if(piece->rXpos == 9) return true;
-        for(int i = piece->tYpos; i <= piece->bYpos; i++) {
-            if(grid[i][piece->rXpos+1] != '0' && grid[i][piece->rXpos] != '0') {
-                check = true;
-                break;
+        // Iterate over 4x4 piece matrix
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                // This condition maps a square on the piece grid to a square on the game grid.
+                if(piece->squares[i][j] == grid[piece->tYpos+i][piece->lXpos+j] && piece->squares[i][j] != '0') {
+                    
+                    // If the right-most piece position is on the edge, count as collision
+                    if( piece->lXpos+j == 9 ||
+                        (grid[piece->tYpos+i][piece->lXpos+j+1] != '0' && (j == 3 || piece->squares[i][j+1] == '0'))) {
+                        check = true;
+                        break;
+                    }
+                }
             }
         }
         return check;
@@ -215,11 +220,12 @@ class Grid {
 
 
     bool checkFullRow(int row) {
+        if (row > 19) return false;
         bool check = true;
         for(int i = 0; i < 10; i++) {
-            if(grid[row][i] == '0') check = false;
+            if(grid[row][i] == '0') return false;
         }
-        return check;
+        return true;
     }
 
     int multiClear(Tetromino* piece) {
